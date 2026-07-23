@@ -354,16 +354,291 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
 var $=function(i){return document.getElementById(i)};
 var items=[], seq=0, activeFileId=null;
 
+/* m = canvas mime (native)  |  enc = custom encoder id  |  ext = file extension */
 var FORMATS={
   Image:[
-    {k:'BMP',m:null},{k:'EPS',m:null},{k:'GIF',m:null},
-    {k:'ICO',m:null},{k:'JPEG',m:'image/jpeg'},{k:'JPG',m:'image/jpeg'},
-    {k:'PNG',m:'image/png'},{k:'PSD',m:null},{k:'SVG',m:null},
-    {k:'TGA',m:null},{k:'TIFF',m:null},{k:'WebP',m:'image/webp'},
-    {k:'AVIF',m:'image/avif'}
+    {k:'BMP',enc:'bmp',ext:'bmp'},
+    {k:'EPS',m:null},
+    {k:'GIF',enc:'gif',ext:'gif'},
+    {k:'ICO',enc:'ico',ext:'ico'},
+    {k:'JPEG',m:'image/jpeg',ext:'jpeg'},
+    {k:'JPG',m:'image/jpeg',ext:'jpg'},
+    {k:'PNG',m:'image/png',ext:'png'},
+    {k:'PSD',m:null},
+    {k:'SVG',m:null},
+    {k:'TGA',m:null},
+    {k:'TIFF',enc:'tiff',ext:'tiff'},
+    {k:'WebP',m:'image/webp',ext:'webp'},
+    {k:'AVIF',m:'image/avif',ext:'avif'}
   ],
-  Document:[{k:'PDF',m:null},{k:'DOC',m:null},{k:'DOCX',m:null},{k:'TXT',m:null}],
+  Document:[
+    {k:'PDF',enc:'pdf',ext:'pdf'},
+    {k:'DOC',m:null},{k:'DOCX',m:null},{k:'TXT',m:null}
+  ],
   Report:[{k:'CSV',m:null},{k:'XLS',m:null},{k:'JSON',m:null}]
+};
+function fmtByKey(k){
+  var out=null;
+  Object.keys(FORMATS).forEach(function(c){
+    FORMATS[c].forEach(function(f){ if(f.k===k) out=f; });
+  });
+  return out;
+}
+
+/* ══ custom encoders (all client-side) ══ */
+var ENC={};
+
+/* BMP — 24-bit uncompressed, written by hand */
+ENC.bmp=function(canvas,q,cb){
+  var w=canvas.width,h=canvas.height;
+  var data=canvas.getContext('2d').getImageData(0,0,w,h).data;
+  var rowSize=Math.floor((24*w+31)/32)*4;
+  var pixArr=rowSize*h;
+  var fileSize=54+pixArr;
+  var buf=new ArrayBuffer(fileSize);
+  var v=new DataView(buf);
+  v.setUint8(0,0x42); v.setUint8(1,0x4D);
+  v.setUint32(2,fileSize,true);
+  v.setUint32(10,54,true);
+  v.setUint32(14,40,true);
+  v.setInt32(18,w,true);
+  v.setInt32(22,h,true);
+  v.setUint16(26,1,true);
+  v.setUint16(28,24,true);
+  v.setUint32(34,pixArr,true);
+  v.setInt32(38,2835,true);
+  v.setInt32(42,2835,true);
+  var p=54;
+  for(var y=h-1;y>=0;y--){
+    var rowStart=p;
+    for(var x=0;x<w;x++){
+      var i=(y*w+x)*4;
+      var a=data[i+3]/255;
+      v.setUint8(p++, Math.round(data[i+2]*a+255*(1-a)));
+      v.setUint8(p++, Math.round(data[i+1]*a+255*(1-a)));
+      v.setUint8(p++, Math.round(data[i]*a+255*(1-a)));
+    }
+    while(p-rowStart<rowSize) v.setUint8(p++,0);
+  }
+  cb(new Blob([buf],{type:'image/bmp'}));
+};
+
+/* ICO — PNG payload inside an ICO container */
+ENC.ico=function(canvas,q,cb){
+  var side=Math.min(256,Math.max(canvas.width,canvas.height));
+  var sq=document.createElement('canvas');
+  sq.width=sq.height=side;
+  var sctx=sq.getContext('2d');
+  var scale=Math.min(side/canvas.width,side/canvas.height);
+  var dw=canvas.width*scale, dh=canvas.height*scale;
+  sctx.drawImage(canvas,(side-dw)/2,(side-dh)/2,dw,dh);
+  sq.toBlob(function(png){
+    if(!png){ cb(null); return; }
+    png.arrayBuffer().then(function(pngBuf){
+      var head=new ArrayBuffer(22);
+      var v=new DataView(head);
+      v.setUint16(0,0,true);
+      v.setUint16(2,1,true);
+      v.setUint16(4,1,true);
+      v.setUint8(6,side>=256?0:side);
+      v.setUint8(7,side>=256?0:side);
+      v.setUint8(8,0); v.setUint8(9,0);
+      v.setUint16(10,1,true);
+      v.setUint16(12,32,true);
+      v.setUint32(14,pngBuf.byteLength,true);
+      v.setUint32(18,22,true);
+      cb(new Blob([head,pngBuf],{type:'image/x-icon'}));
+    });
+  },'image/png');
+};
+
+/* TIFF — uncompressed RGBA baseline, written by hand */
+ENC.tiff=function(canvas,q,cb){
+  var w=canvas.width,h=canvas.height;
+  var px=canvas.getContext('2d').getImageData(0,0,w,h).data;
+  var nTags=12, ifdSize=2+nTags*12+4;
+  var dataOff=8+ifdSize+32;
+  var total=dataOff+px.length;
+  var buf=new ArrayBuffer(total);
+  var v=new DataView(buf);
+  v.setUint16(0,0x4949,true);
+  v.setUint16(2,42,true);
+  v.setUint32(4,8,true);
+  var o=8;
+  v.setUint16(o,nTags,true); o+=2;
+  var extra=8+ifdSize;
+  function tag(id,type,count,val){
+    v.setUint16(o,id,true); v.setUint16(o+2,type,true);
+    v.setUint32(o+4,count,true); v.setUint32(o+8,val,true); o+=12;
+  }
+  v.setUint16(extra,8,true); v.setUint16(extra+2,8,true);
+  v.setUint16(extra+4,8,true); v.setUint16(extra+6,8,true);
+  var bpsOff=extra;
+  v.setUint32(extra+8,72,true); v.setUint32(extra+12,1,true);
+  var resOff=extra+8;
+  var extraSampleOff=extra+16;
+  v.setUint16(extraSampleOff,2,true);
+  tag(256,3,1,w);
+  tag(257,3,1,h);
+  tag(258,3,4,bpsOff);
+  tag(259,3,1,1);
+  tag(262,3,1,2);
+  tag(273,4,1,dataOff);
+  tag(277,3,1,4);
+  tag(278,3,1,h);
+  tag(279,4,1,px.length);
+  tag(282,5,1,resOff);
+  tag(283,5,1,resOff);
+  tag(338,3,1,2);
+  v.setUint32(o,0,true);
+  new Uint8Array(buf,dataOff).set(px);
+  cb(new Blob([buf],{type:'image/tiff'}));
+};
+
+/* GIF — 256-colour, median-cut palette, LZW compressed */
+ENC.gif=function(canvas,q,cb){
+  var w=canvas.width,h=canvas.height;
+  var src=canvas.getContext('2d').getImageData(0,0,w,h).data;
+  var n=w*h, rgb=new Uint8Array(n*3);
+  for(var i=0,j=0;i<n;i++,j+=3){
+    var a=src[i*4+3]/255;
+    rgb[j]=Math.round(src[i*4]*a+255*(1-a));
+    rgb[j+1]=Math.round(src[i*4+1]*a+255*(1-a));
+    rgb[j+2]=Math.round(src[i*4+2]*a+255*(1-a));
+  }
+  var boxes=[{idx:buildIndex(n),depth:0}];
+  function buildIndex(len){var a=new Uint32Array(len);for(var k=0;k<len;k++)a[k]=k;return a}
+  while(boxes.length<256){
+    var bi=-1,bestRange=-1;
+    for(var b=0;b<boxes.length;b++){
+      if(boxes[b].idx.length<2) continue;
+      var r=rangeOf(boxes[b].idx);
+      if(r.range>bestRange){bestRange=r.range;bi=b}
+    }
+    if(bi<0) break;
+    var box=boxes[bi], ch=rangeOf(box.idx).ch;
+    var arr=Array.prototype.slice.call(box.idx);
+    arr.sort(function(x,y){return rgb[x*3+ch]-rgb[y*3+ch]});
+    var mid=arr.length>>1;
+    boxes.splice(bi,1,
+      {idx:Uint32Array.from(arr.slice(0,mid))},
+      {idx:Uint32Array.from(arr.slice(mid))});
+  }
+  function rangeOf(idx){
+    var mn=[255,255,255],mx=[0,0,0];
+    for(var k=0;k<idx.length;k++){
+      for(var c=0;c<3;c++){
+        var val=rgb[idx[k]*3+c];
+        if(val<mn[c])mn[c]=val;
+        if(val>mx[c])mx[c]=val;
+      }
+    }
+    var best=0,bestR=-1;
+    for(var c2=0;c2<3;c2++){var d=mx[c2]-mn[c2];if(d>bestR){bestR=d;best=c2}}
+    return {ch:best,range:bestR};
+  }
+  var pal=[], lookup=new Uint8Array(n);
+  boxes.forEach(function(bx,pi){
+    var s=[0,0,0];
+    for(var k=0;k<bx.idx.length;k++)
+      for(var c=0;c<3;c++) s[c]+=rgb[bx.idx[k]*3+c];
+    var len=Math.max(1,bx.idx.length);
+    pal.push([Math.round(s[0]/len),Math.round(s[1]/len),Math.round(s[2]/len)]);
+    for(var k2=0;k2<bx.idx.length;k2++) lookup[bx.idx[k2]]=pi;
+  });
+  while(pal.length<2) pal.push([0,0,0]);
+  var bits=Math.max(1,Math.ceil(Math.log(pal.length)/Math.LN2));
+  var palSize=1<<bits;
+  var out=[];
+  function byte(b){out.push(b&255)}
+  function short(s){byte(s);byte(s>>8)}
+  'GIF89a'.split('').forEach(function(c){byte(c.charCodeAt(0))});
+  short(w); short(h);
+  byte(0x80|((bits-1)&7)); byte(0); byte(0);
+  for(var p=0;p<palSize;p++){
+    var col=pal[p]||[0,0,0];
+    byte(col[0]);byte(col[1]);byte(col[2]);
+  }
+  byte(0x2C); short(0);short(0);short(w);short(h);byte(0);
+  var minCode=Math.max(2,bits);
+  byte(minCode);
+  var lzw=lzwEncode(lookup,minCode);
+  for(var s2=0;s2<lzw.length;s2+=255){
+    var chunk=lzw.slice(s2,s2+255);
+    byte(chunk.length);
+    for(var c3=0;c3<chunk.length;c3++) byte(chunk[c3]);
+  }
+  byte(0); byte(0x3B);
+  cb(new Blob([new Uint8Array(out)],{type:'image/gif'}));
+
+  function lzwEncode(pixels,minCodeSize){
+    var clearCode=1<<minCodeSize, eoiCode=clearCode+1;
+    var codeSize=minCodeSize+1, dict={}, next=eoiCode+1;
+    var res=[], cur=0, curBits=0;
+    function emit(code){
+      cur|=code<<curBits; curBits+=codeSize;
+      while(curBits>=8){ res.push(cur&255); cur>>=8; curBits-=8; }
+    }
+    function reset(){ dict={}; next=eoiCode+1; codeSize=minCodeSize+1; }
+    emit(clearCode); reset();
+    var prefix=String(pixels[0]);
+    for(var i2=1;i2<pixels.length;i2++){
+      var k=pixels[i2], comb=prefix+','+k;
+      if(dict[comb]!==undefined){ prefix=comb; }
+      else{
+        emit(prefix.indexOf(',')<0?parseInt(prefix,10):dict[prefix]);
+        dict[comb]=next++;
+        if(next>(1<<codeSize) && codeSize<12) codeSize++;
+        else if(next>4095){ emit(clearCode); reset(); }
+        prefix=String(k);
+      }
+    }
+    emit(prefix.indexOf(',')<0?parseInt(prefix,10):dict[prefix]);
+    emit(eoiCode);
+    if(curBits>0) res.push(cur&255);
+    return res;
+  }
+};
+
+/* PDF — single page sized to the image, JPEG-embedded */
+ENC.pdf=function(canvas,q,cb){
+  canvas.toBlob(function(jpg){
+    if(!jpg){cb(null);return}
+    jpg.arrayBuffer().then(function(ab){
+      var img=new Uint8Array(ab);
+      var w=canvas.width,h=canvas.height;
+      var parts=[], offsets=[], pos=0;
+      function push(str){
+        var bytes=new Uint8Array(str.length);
+        for(var i=0;i<str.length;i++) bytes[i]=str.charCodeAt(i)&255;
+        parts.push(bytes); pos+=bytes.length;
+      }
+      function pushRaw(u8){ parts.push(u8); pos+=u8.length; }
+      push('%PDF-1.4\n');
+      offsets[1]=pos;
+      push('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+      offsets[2]=pos;
+      push('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+      offsets[3]=pos;
+      push('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+w+' '+h+
+           '] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n');
+      offsets[4]=pos;
+      push('4 0 obj\n<< /Type /XObject /Subtype /Image /Width '+w+' /Height '+h+
+           ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+
+           img.length+' >>\nstream\n');
+      pushRaw(img);
+      push('\nendstream\nendobj\n');
+      var content='q\n'+w+' 0 0 '+h+' 0 0 cm\n/Im0 Do\nQ\n';
+      offsets[5]=pos;
+      push('5 0 obj\n<< /Length '+content.length+' >>\nstream\n'+content+'endstream\nendobj\n');
+      var xref=pos;
+      var x='xref\n0 6\n0000000000 65535 f \n';
+      for(var i=1;i<=5;i++) x+=('0000000000'+offsets[i]).slice(-10)+' 00000 n \n';
+      push(x);
+      push('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF');
+      cb(new Blob(parts,{type:'application/pdf'}));
+    });
+  },'image/jpeg',q);
 };
 
 var AVIF_OK=(function(){
@@ -377,8 +652,8 @@ function bytes(b){
   return (b/1048576).toFixed(2)+' MB';
 }
 function stem(n){return n.replace(/\.[^.]+$/,'')}
-function extOf(m){return m==='image/webp'?'webp':m==='image/avif'?'avif':m==='image/png'?'png':'jpg'}
-function keyOf(m){return m==='image/webp'?'WebP':m==='image/avif'?'AVIF':m==='image/png'?'PNG':'JPG'}
+function extOf(key){var f=fmtByKey(key);return (f&&f.ext)||'jpg'}
+function keyOf(key){return key}
 
 /* ── dropdown menus ── */
 function bindMenu(caretId,menuId){
@@ -444,7 +719,7 @@ function add(fl){
   arr.forEach(function(f){
     items.push({
       id:++seq,file:f,url:URL.createObjectURL(f),
-      out:'image/jpeg',quality:85,maxw:0,
+      out:'JPG',quality:85,maxw:0,
       blob:null,outUrl:null,err:null
     });
   });
@@ -535,14 +810,14 @@ function drawFmt(cat,q){
     var b=document.createElement('button');
     b.className='fopt';
     b.textContent=f.k;
-    var usable=f.m && (f.m!=='image/avif'||AVIF_OK);
+    var usable=(f.enc?true:(f.m && (f.m!=='image/avif'||AVIF_OK)));
     if(!usable){
       b.disabled=true;
-      b.title=f.m==='image/avif' ? 'This browser cannot encode AVIF' : 'Cannot be written by a browser \u2014 needs a server';
+      b.title=f.k==='AVIF' ? 'This browser cannot encode AVIF' : f.k+' output needs server-side processing';
     } else {
-      if(it && it.out===f.m && keyOf(f.m)===f.k) b.classList.add('on');
+      if(it && it.out===f.k) b.classList.add('on');
       b.addEventListener('click',function(){
-        if(it){ it.out=f.m; }
+        if(it){ it.out=f.k; }
         $('fmtOvl').classList.remove('on');
         paint();
       });
@@ -552,8 +827,10 @@ function drawFmt(cat,q){
   var note=document.createElement('div');
   note.className='fnote';
   note.textContent = cat==='Image'
-    ? 'Greyed-out formats can be read but not written by a browser. Enabling them would mean uploading your files to a server.'
-    : 'Document and report output needs server-side processing, which would mean uploading your files. Image formats only for now.';
+    ? 'EPS, PSD, SVG and TGA need server-side processing, which would mean uploading your files. Everything else runs locally.'
+    : cat==='Document'
+      ? 'PDF is generated locally in your browser. Word and text output would require a server.'
+      : 'Report formats need server-side processing. Not available in a no-upload tool.';
   grid.appendChild(note);
 }
 $('fmtOvl').addEventListener('click',function(e){ if(e.target===$('fmtOvl')) this.classList.remove('on') });
@@ -576,6 +853,8 @@ $('convertBtn').addEventListener('click',function(){
 });
 
 function convertOne(it,cb){
+  var fmt=fmtByKey(it.out);
+  if(!fmt){ it.err='Unknown format'; cb(); return; }
   var img=new Image();
   img.onload=function(){
     var w=img.naturalWidth,h=img.naturalHeight;
@@ -583,15 +862,29 @@ function convertOne(it,cb){
     var c=document.createElement('canvas');
     c.width=w;c.height=h;
     var ctx=c.getContext('2d');
-    if(it.out==='image/jpeg'){ctx.fillStyle='#FFF';ctx.fillRect(0,0,w,h)}
+    /* formats without alpha need a white matte */
+    if(fmt.m==='image/jpeg'||fmt.enc==='bmp'||fmt.enc==='pdf'||fmt.enc==='gif'){
+      ctx.fillStyle='#FFF'; ctx.fillRect(0,0,w,h);
+    }
     ctx.drawImage(img,0,0,w,h);
-    c.toBlob(function(b){
+
+    function finish(b){
       if(b){
         if(it.outUrl) URL.revokeObjectURL(it.outUrl);
         it.blob=b; it.outUrl=URL.createObjectURL(b); it.outW=w; it.outH=h;
-      } else it.err='Could not encode';
+      } else if(!it.err){ it.err='Could not encode'; }
       cb();
-    },it.out,it.out==='image/png'?undefined:it.quality/100);
+    }
+
+    if(fmt.enc){
+      try{
+        ENC[fmt.enc](c,it.quality/100,finish);
+      }catch(e){
+        it.err='Encoding failed'; cb();
+      }
+    } else {
+      c.toBlob(finish,fmt.m,fmt.m==='image/png'?undefined:it.quality/100);
+    }
   };
   img.onerror=function(){
     it.err=/\.(heic|heif)$/i.test(it.file.name)?'HEIC not supported by this browser':'Could not read file';
