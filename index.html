@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image Compressor — Compress PNG, JPG, WebP & AVIF Online Free</title>
-<meta name="description" content="Batch compress and convert images in your browser. Unlimited PNG, JPG, WebP and AVIF files. Nothing uploads — your images never leave your device.">
+<title>Image Compressor &amp; Converter — PNG, JPG, WebP, AVIF | Free Online</title>
+<meta name="description" content="Compress or convert images step by step in your browser. Unlimited batch, PNG, JPG, WebP and AVIF. Nothing uploads — your files never leave your device.">
 <link rel="canonical" href="https://YOURDOMAIN.com/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E1116'/%3E%3Cpath d='M8 20l5-6 4 4 3-3 4 5z' fill='%2300E5A0'/%3E%3Ccircle cx='12' cy='11' r='2' fill='%2300E5A0'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,133 +12,177 @@
 <style>
 :root{
   --bg:#0E1116; --surface:#161B22; --surface-2:#1C2230; --line:#262D3A;
-  --text:#E8EDF4; --text-dim:#8B96A8;
+  --text:#E8EDF4; --dim:#8B96A8; --faint:#5A6474;
   --accent:#00E5A0; --accent-dim:rgba(0,229,160,.12); --warn:#FFB020;
-  --radius:14px;
-  --font-display:'Sora',system-ui,sans-serif;
-  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  --r:14px;
+  --fd:'Sora',system-ui,sans-serif;
+  --fm:'IBM Plex Mono',ui-monospace,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--font-display);line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+body{background:var(--bg);color:var(--text);font-family:var(--fd);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:940px;margin:0 auto;padding:0 20px}
 
-header{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(14,17,22,.88);backdrop-filter:blur(10px);z-index:50}
-.head-inner{display:flex;align-items:center;justify-content:space-between;height:62px}
-.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:1.02rem;letter-spacing:-.01em;text-decoration:none;color:var(--text)}
+header{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(14,17,22,.9);backdrop-filter:blur(10px);z-index:50}
+.head-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:1rem;text-decoration:none;color:var(--text)}
 .logo-mark{width:26px;height:26px;border-radius:7px;background:var(--accent-dim);border:1px solid rgba(0,229,160,.3);display:grid;place-items:center;color:var(--accent);font-size:.85rem}
-.nav-tools{display:flex;gap:4px}
-.nav-tools a{font-size:.82rem;color:var(--text-dim);text-decoration:none;padding:6px 11px;border-radius:7px;transition:.15s}
-.nav-tools a:hover{color:var(--text);background:var(--surface-2)}
-.nav-tools a.active{color:var(--accent);background:var(--accent-dim)}
+.head-note{font-family:var(--fm);font-size:.72rem;color:var(--dim)}
 
-.hero{padding:52px 0 34px;text-align:center}
-.eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(0,229,160,.22);padding:5px 12px;border-radius:99px;margin-bottom:18px}
-.dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
-h1{font-size:clamp(2rem,5.2vw,3.1rem);font-weight:700;letter-spacing:-.03em;line-height:1.08;margin-bottom:14px}
+.hero{padding:44px 0 28px;text-align:center}
+h1{font-size:clamp(1.8rem,4.6vw,2.7rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:12px}
 h1 em{font-style:normal;color:var(--accent)}
-.sub{color:var(--text-dim);font-size:1.02rem;max-width:540px;margin:0 auto}
+.sub{color:var(--dim);max-width:500px;margin:0 auto;font-size:.98rem}
 
-.dropzone{margin:32px 0 0;border:1.5px dashed var(--line);border-radius:var(--radius);background:var(--surface);padding:44px 24px;text-align:center;cursor:pointer;transition:border-color .18s,background .18s}
-.dropzone:hover,.dropzone.drag{border-color:var(--accent);background:var(--surface-2)}
-.dz-icon{font-size:2rem;margin-bottom:12px;opacity:.9}
-.dz-title{font-weight:600;font-size:1.05rem;margin-bottom:5px}
-.dz-hint{color:var(--text-dim);font-size:.85rem}
-.dz-formats{font-family:var(--font-mono);font-size:.72rem;color:var(--text-dim);margin-top:14px;letter-spacing:.04em}
+/* ── Stepper ── */
+.step{
+  border:1px solid var(--line);border-radius:var(--r);
+  background:var(--surface);margin-bottom:14px;overflow:hidden;
+  transition:border-color .2s,opacity .2s;
+}
+.step.locked{opacity:.45;pointer-events:none}
+.step.active{border-color:rgba(0,229,160,.4)}
+.step.done .step-num{background:var(--accent);color:#04140E;border-color:var(--accent)}
+.step-head{display:flex;align-items:center;gap:13px;padding:15px 18px}
+.step-num{
+  width:27px;height:27px;flex-shrink:0;border-radius:50%;
+  border:1px solid var(--line);background:var(--surface-2);
+  display:grid;place-items:center;
+  font-family:var(--fm);font-size:.78rem;font-weight:600;color:var(--dim);
+}
+.step.active .step-num{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.step-title{font-weight:600;font-size:.98rem;flex:1}
+.step-meta{font-family:var(--fm);font-size:.75rem;color:var(--dim)}
+.step-body{padding:0 18px 18px;display:none}
+.step.active .step-body,.step.done .step-body{display:block}
+.step.done.collapsed .step-body{display:none}
 
-.controls{display:none;margin-top:20px;padding:18px 20px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);gap:26px;flex-wrap:wrap;align-items:flex-end}
-.controls.on{display:flex}
-.ctrl{flex:1;min-width:180px}
-.ctrl-label{display:flex;justify-content:space-between;align-items:baseline;font-size:.78rem;color:var(--text-dim);margin-bottom:8px}
-.ctrl-val{font-family:var(--font-mono);color:var(--accent);font-weight:500}
+/* Dropzone */
+.dz{border:1.5px dashed var(--line);border-radius:11px;background:var(--bg);padding:38px 20px;text-align:center;cursor:pointer;transition:.18s}
+.dz:hover,.dz.drag{border-color:var(--accent);background:var(--surface-2)}
+.dz-icon{font-size:1.7rem;margin-bottom:9px}
+.dz-t{font-weight:600;margin-bottom:4px}
+.dz-h{color:var(--dim);font-size:.84rem}
+.dz-f{font-family:var(--fm);font-size:.7rem;color:var(--faint);margin-top:12px;letter-spacing:.05em}
+
+/* Thumb strip */
+.strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{position:relative;width:58px;height:58px;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:var(--surface-2)}
+.chip img{width:100%;height:100%;object-fit:cover;display:block}
+.chip button{position:absolute;top:2px;right:2px;width:17px;height:17px;border-radius:50%;border:none;background:rgba(5,7,10,.8);color:#fff;font-size:.7rem;line-height:1;cursor:pointer;display:grid;place-items:center}
+.chip button:hover{background:var(--warn);color:#111}
+.more-chip{display:grid;place-items:center;font-family:var(--fm);font-size:.74rem;color:var(--dim)}
+.strip-actions{display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap}
+
+/* Action choice */
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.choice{
+  text-align:left;padding:15px 16px;border-radius:11px;cursor:pointer;
+  background:var(--bg);border:1px solid var(--line);color:var(--text);
+  font-family:var(--fd);transition:.15s;
+}
+.choice:hover{border-color:var(--dim)}
+.choice.on{border-color:var(--accent);background:var(--accent-dim)}
+.choice-t{font-weight:600;font-size:.94rem;margin-bottom:3px;display:flex;align-items:center;gap:7px}
+.choice.on .choice-t{color:var(--accent)}
+.choice-d{font-size:.82rem;color:var(--dim);line-height:1.45}
+
+.opts{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.opts.on{display:block}
+.opt-row{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end}
+.opt{flex:1;min-width:170px}
+.opt-label{display:flex;justify-content:space-between;align-items:baseline;font-size:.78rem;color:var(--dim);margin-bottom:7px}
+.opt-val{font-family:var(--fm);color:var(--accent);font-weight:500}
 input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--surface-2);outline:none}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer;border:none}
 input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer;border:none}
 .seg{display:flex;gap:5px;flex-wrap:wrap}
-.seg button{flex:1;min-width:56px;padding:8px;font-family:var(--font-mono);font-size:.74rem;font-weight:500;background:var(--surface-2);color:var(--text-dim);border:1px solid var(--line);border-radius:8px;cursor:pointer;transition:.15s}
+.seg button{flex:1;min-width:54px;padding:8px;font-family:var(--fm);font-size:.74rem;font-weight:500;background:var(--surface-2);color:var(--dim);border:1px solid var(--line);border-radius:8px;cursor:pointer;transition:.15s}
 .seg button:hover{color:var(--text)}
 .seg button.on{background:var(--accent-dim);color:var(--accent);border-color:rgba(0,229,160,.35)}
-.seg button[disabled]{opacity:.35;cursor:not-allowed}
+.seg button[disabled]{opacity:.32;cursor:not-allowed}
 
-.results{margin-top:22px}
-.summary{display:none;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px 20px;margin-bottom:14px;background:linear-gradient(90deg,var(--accent-dim),transparent);border:1px solid rgba(0,229,160,.25);border-radius:var(--radius)}
-.summary.on{display:flex}
-.sum-stat{font-family:var(--font-mono)}
-.sum-num{font-size:1.6rem;font-weight:600;color:var(--accent);line-height:1}
-.sum-lbl{font-size:.74rem;color:var(--text-dim);margin-top:3px}
-.btn{font-family:var(--font-display);font-weight:600;font-size:.86rem;padding:11px 20px;border-radius:9px;border:none;cursor:pointer;transition:.15s;background:var(--accent);color:#04140E}
+/* Buttons */
+.btn{font-family:var(--fd);font-weight:600;font-size:.88rem;padding:12px 22px;border-radius:9px;border:none;cursor:pointer;transition:.15s;background:var(--accent);color:#04140E}
 .btn:hover{filter:brightness(1.08)}
-.btn[disabled]{opacity:.6;cursor:wait}
-.btn-ghost{background:transparent;color:var(--text-dim);border:1px solid var(--line)}
-.btn-ghost:hover{color:var(--text);border-color:var(--text-dim)}
+.btn[disabled]{opacity:.55;cursor:not-allowed;filter:none}
+.btn-ghost{background:transparent;color:var(--dim);border:1px solid var(--line)}
+.btn-ghost:hover{color:var(--text);border-color:var(--dim)}
+.btn-wide{width:100%;padding:14px;font-size:.95rem}
+.btn-sm{padding:8px 14px;font-size:.8rem}
 
-.file{display:flex;align-items:center;gap:14px;padding:12px 14px;margin-bottom:9px;background:var(--surface);border:1px solid var(--line);border-radius:11px}
-.thumb{width:46px;height:46px;border-radius:8px;object-fit:cover;background:var(--surface-2);flex-shrink:0;cursor:pointer}
-.f-main{flex:1;min-width:0}
-.f-name{font-size:.86rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px}
-.bar{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden;margin-bottom:5px}
-.bar-fill{height:100%;background:var(--accent);width:0;transition:width .55s cubic-bezier(.2,.8,.2,1)}
-.f-meta{font-family:var(--font-mono);font-size:.73rem;color:var(--text-dim);display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-.f-meta .save{color:var(--accent);font-weight:500}
-.f-meta .old{text-decoration:line-through;opacity:.6}
-.f-compare{background:none;border:none;color:var(--accent);font-family:var(--font-mono);font-size:.72rem;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
-.f-actions{display:flex;gap:7px;align-items:center;flex-shrink:0}
-.f-dl{font-family:var(--font-mono);font-size:.75rem;font-weight:500;padding:7px 13px;border-radius:7px;text-decoration:none;white-space:nowrap;background:var(--accent-dim);color:var(--accent);border:1px solid rgba(0,229,160,.28);transition:.15s}
-.f-dl:hover{background:rgba(0,229,160,.2)}
-.f-x{background:none;border:none;color:var(--text-dim);font-size:1.1rem;cursor:pointer;padding:2px 6px;line-height:1;border-radius:5px}
-.f-x:hover{color:var(--warn);background:var(--surface-2)}
-.f-wait{font-family:var(--font-mono);font-size:.75rem;color:var(--text-dim)}
+.progress{display:none;margin-top:13px}
+.progress.on{display:block}
+.pbar{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.pbar span{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}
+.ptext{font-family:var(--fm);font-size:.74rem;color:var(--dim);margin-top:7px;text-align:center}
 
-.modal{position:fixed;inset:0;background:rgba(5,7,10,.9);backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+/* Results */
+.totals{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:15px 17px;margin-bottom:13px;background:linear-gradient(90deg,var(--accent-dim),transparent);border:1px solid rgba(0,229,160,.25);border-radius:11px}
+.tstat{font-family:var(--fm)}
+.tnum{font-size:1.45rem;font-weight:600;color:var(--accent);line-height:1}
+.tlbl{font-size:.72rem;color:var(--dim);margin-top:2px}
+
+.row{display:flex;align-items:center;gap:13px;padding:11px 13px;margin-bottom:8px;background:var(--bg);border:1px solid var(--line);border-radius:10px}
+.row-th{width:42px;height:42px;border-radius:7px;object-fit:cover;background:var(--surface-2);flex-shrink:0;cursor:pointer}
+.row-main{flex:1;min-width:0}
+.row-name{font-size:.85rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
+.row-meta{font-family:var(--fm);font-size:.72rem;color:var(--dim);display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.row-meta .old{text-decoration:line-through;opacity:.55}
+.row-meta .save{color:var(--accent);font-weight:500}
+.lnk{background:none;border:none;color:var(--accent);font-family:var(--fm);font-size:.72rem;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
+.row-dl{font-family:var(--fm);font-size:.74rem;font-weight:500;padding:7px 12px;border-radius:7px;text-decoration:none;white-space:nowrap;background:var(--accent-dim);color:var(--accent);border:1px solid rgba(0,229,160,.28);flex-shrink:0}
+.row-dl:hover{background:rgba(0,229,160,.2)}
+
+/* Compare modal */
+.modal{position:fixed;inset:0;background:rgba(5,7,10,.92);backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center;padding:18px}
 .modal.on{display:flex}
-.modal-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);max-width:900px;width:100%;max-height:92vh;overflow:auto}
-.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
-.modal-title{font-size:.92rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.modal-x{background:none;border:none;color:var(--text-dim);font-size:1.4rem;cursor:pointer;line-height:1;padding:0 4px}
-.modal-x:hover{color:var(--text)}
-.cmp{position:relative;width:100%;background:var(--surface-2);overflow:hidden;user-select:none;touch-action:none;cursor:ew-resize}
-.cmp>img{display:block;width:100%;height:auto}
-.cmp-after{position:absolute;top:0;left:0;bottom:0;overflow:hidden;width:50%}
-.cmp-after img{display:block;height:100%;width:auto;max-width:none}
-.cmp-handle{position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--accent);pointer-events:none}
-.cmp-handle::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:var(--accent);border:3px solid var(--bg)}
-.cmp-tag{position:absolute;top:10px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:5px;background:rgba(5,7,10,.75);color:var(--text);pointer-events:none}
-.cmp-tag.l{left:10px}
-.cmp-tag.r{right:10px;color:var(--accent)}
-.modal-foot{display:flex;gap:22px;padding:13px 18px;border-top:1px solid var(--line);font-family:var(--font-mono);font-size:.78rem;flex-wrap:wrap}
-.modal-foot b{color:var(--accent);font-weight:500}
+.mbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);max-width:880px;width:100%;max-height:92vh;overflow:auto}
+.mhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 17px;border-bottom:1px solid var(--line)}
+.mtitle{font-size:.9rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mx{background:none;border:none;color:var(--dim);font-size:1.4rem;cursor:pointer;line-height:1;padding:0 4px}
+.mx:hover{color:var(--text)}
+.cmp{position:relative;width:100%;background:#0A0D11;overflow:hidden;user-select:none;touch-action:none;cursor:ew-resize;line-height:0}
+.cmp-base{display:block;width:100%;height:auto}
+.cmp-top{position:absolute;top:0;left:0;height:100%;overflow:hidden;width:50%}
+.cmp-top img{display:block;height:100%;width:auto;max-width:none;object-fit:cover;object-position:left top}
+.cmp-line{position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--accent);pointer-events:none;transform:translateX(-1px)}
+.cmp-line::after{content:'\2194';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:var(--accent);color:#04140E;border:3px solid var(--bg);display:grid;place-items:center;font-size:.9rem;line-height:1}
+.tag{position:absolute;top:9px;font-family:var(--fm);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:5px;background:rgba(5,7,10,.78);pointer-events:none;line-height:1.4}
+.tag.l{left:9px}
+.tag.r{right:9px;color:var(--accent)}
+.mfoot{display:flex;gap:20px;padding:12px 17px;border-top:1px solid var(--line);font-family:var(--fm);font-size:.77rem;flex-wrap:wrap;color:var(--dim)}
+.mfoot b{color:var(--accent);font-weight:500}
 
-.ad-slot{margin:30px 0;text-align:center;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ad-label{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#4A5361;margin-bottom:7px}
+.ad-slot{margin:28px 0;text-align:center;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ad-label{font-family:var(--fm);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#454E5C;margin-bottom:6px}
 
-.section{padding:44px 0;border-top:1px solid var(--line);margin-top:44px}
-h2{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
-.section p{color:var(--text-dim);max-width:660px;margin-bottom:16px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:24px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
-.card h3{font-size:.98rem;font-weight:600;margin-bottom:7px}
-.card p{font-size:.87rem;margin:0;color:var(--text-dim)}
-.faq{border-top:1px solid var(--line);padding:16px 0}
-.faq summary{font-weight:600;font-size:.95rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.section{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
+h2{font-size:1.4rem;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.section>p{color:var(--dim);max-width:640px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin-top:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.card h3{font-size:.95rem;font-weight:600;margin-bottom:6px}
+.card p{font-size:.85rem;color:var(--dim)}
+.faq{border-top:1px solid var(--line);padding:15px 0}
+.faq summary{font-weight:600;font-size:.93rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:'+';font-family:var(--font-mono);color:var(--accent);font-size:1.2rem;flex-shrink:0}
+.faq summary::after{content:'+';font-family:var(--fm);color:var(--accent);font-size:1.15rem}
 .faq[open] summary::after{content:'\2212'}
-.faq p{margin-top:11px;font-size:.9rem}
+.faq p{margin-top:10px;font-size:.88rem;color:var(--dim)}
 
-footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px}
-.foot-inner{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--text-dim)}
-.foot-inner a{color:var(--text-dim);text-decoration:none}
-.foot-inner a:hover{color:var(--accent)}
+footer{border-top:1px solid var(--line);padding:24px 0;margin-top:40px}
+.foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--dim)}
+.foot a{color:var(--dim);text-decoration:none}
+.foot a:hover{color:var(--accent)}
 
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-@media (max-width:640px){
-  .nav-tools{display:none}
-  .hero{padding:36px 0 26px}
-  .dropzone{padding:34px 18px}
-  .summary{flex-direction:column;align-items:flex-start}
-  .file{flex-wrap:wrap}
-  .f-actions{width:100%;justify-content:flex-end}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:620px){
+  .hero{padding:32px 0 22px}
+  .choices{grid-template-columns:1fr}
+  .row{flex-wrap:wrap}
+  .totals{flex-direction:column;align-items:flex-start}
+  .head-note{display:none}
 }
 </style>
 </head>
@@ -147,85 +191,152 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px}
 <header>
   <div class="wrap head-inner">
     <a href="/" class="logo"><span class="logo-mark">&#9672;</span>ToolBench</a>
-    <nav class="nav-tools">
-      <a href="/" class="active">Image Compressor</a>
-      <a href="#how">How it works</a>
-    </nav>
+    <span class="head-note">Runs offline &middot; nothing uploads</span>
   </div>
 </header>
 
 <main class="wrap">
 
   <section class="hero">
-    <div class="eyebrow"><span class="dot"></span>Nothing leaves your device</div>
-    <h1>Make images <em>smaller</em>,<br>not worse.</h1>
-    <p class="sub">Batch compress and convert PNG, JPG, WebP and AVIF. No upload, no limit, no sign-up &mdash; everything runs inside your browser.</p>
+    <h1>Compress or convert <em>any image</em></h1>
+    <p class="sub">Four steps, no upload, no sign-up. Your files are processed inside this browser tab and never sent anywhere.</p>
   </section>
 
-  <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Choose images to compress">
-    <div class="dz-icon">&darr;</div>
-    <div class="dz-title">Drop images here</div>
-    <div class="dz-hint">or click to browse &mdash; as many as you like</div>
-    <div class="dz-formats">PNG &middot; JPG &middot; WEBP &middot; AVIF &middot; GIF &middot; BMP</div>
-    <input type="file" id="fileInput" accept="image/*,.heic,.heif" multiple hidden>
-  </div>
+  <!-- STEP 1 -->
+  <section class="step active" id="s1">
+    <div class="step-head">
+      <span class="step-num">1</span>
+      <span class="step-title">Add your images</span>
+      <span class="step-meta" id="s1meta"></span>
+    </div>
+    <div class="step-body">
+      <div class="dz" id="dz" role="button" tabindex="0" aria-label="Choose images">
+        <div class="dz-icon">&darr;</div>
+        <div class="dz-t">Drop images here</div>
+        <div class="dz-h">or click to browse &mdash; as many as you like</div>
+        <div class="dz-f">PNG &middot; JPG &middot; WEBP &middot; AVIF &middot; GIF &middot; BMP</div>
+        <input type="file" id="fi" accept="image/*,.heic,.heif" multiple hidden>
+      </div>
+      <div class="strip" id="strip"></div>
+      <div class="strip-actions" id="s1actions" style="display:none">
+        <button class="btn btn-sm" id="toStep2">Continue</button>
+        <button class="btn btn-ghost btn-sm" id="addMore">Add more</button>
+        <button class="btn btn-ghost btn-sm" id="clearAll">Clear all</button>
+      </div>
+    </div>
+  </section>
 
-  <div class="controls" id="controls">
-    <div class="ctrl">
-      <div class="ctrl-label"><span>Quality</span><span class="ctrl-val" id="qVal">80</span></div>
-      <input type="range" id="quality" min="10" max="100" value="80" step="5">
+  <!-- STEP 2 -->
+  <section class="step locked" id="s2">
+    <div class="step-head">
+      <span class="step-num">2</span>
+      <span class="step-title">Choose what to do</span>
+      <span class="step-meta" id="s2meta"></span>
     </div>
-    <div class="ctrl">
-      <div class="ctrl-label"><span>Max width</span><span class="ctrl-val" id="wVal">Original</span></div>
-      <input type="range" id="maxw" min="0" max="4000" value="0" step="200">
-    </div>
-    <div class="ctrl">
-      <div class="ctrl-label"><span>Output format</span></div>
-      <div class="seg" id="fmt">
-        <button data-f="image/webp" class="on">WEBP</button>
-        <button data-f="image/avif" id="btnAvif">AVIF</button>
-        <button data-f="image/jpeg">JPG</button>
-        <button data-f="image/png">PNG</button>
+    <div class="step-body">
+      <div class="choices">
+        <button class="choice" data-mode="compress">
+          <span class="choice-t">Compress</span>
+          <span class="choice-d">Keep the same format, make the file smaller.</span>
+        </button>
+        <button class="choice" data-mode="convert">
+          <span class="choice-t">Convert</span>
+          <span class="choice-d">Change to another format, e.g. JPG to WebP.</span>
+        </button>
       </div>
-    </div>
-  </div>
 
-  <div class="results">
-    <div class="summary" id="summary">
-      <div style="display:flex;gap:30px;flex-wrap:wrap">
-        <div class="sum-stat"><div class="sum-num" id="sumSaved">&mdash;</div><div class="sum-lbl">total saved</div></div>
-        <div class="sum-stat"><div class="sum-num" id="sumPct">&mdash;</div><div class="sum-lbl">smaller</div></div>
-        <div class="sum-stat"><div class="sum-num" id="sumCount">&mdash;</div><div class="sum-lbl">images</div></div>
+      <div class="opts" id="optCompress">
+        <div class="opt-row">
+          <div class="opt">
+            <div class="opt-label"><span>Quality</span><span class="opt-val" id="qv">80</span></div>
+            <input type="range" id="q" min="10" max="100" value="80" step="5">
+          </div>
+          <div class="opt">
+            <div class="opt-label"><span>Max width</span><span class="opt-val" id="wv">Original</span></div>
+            <input type="range" id="w" min="0" max="4000" value="0" step="200">
+          </div>
+        </div>
       </div>
-      <div style="display:flex;gap:9px">
-        <button class="btn" id="dlZip">Download ZIP</button>
-        <button class="btn btn-ghost" id="clearAll">Clear</button>
+
+      <div class="opts" id="optConvert">
+        <div class="opt-row">
+          <div class="opt">
+            <div class="opt-label"><span>Convert to</span></div>
+            <div class="seg" id="fmt">
+              <button data-f="image/webp" class="on">WEBP</button>
+              <button data-f="image/avif" id="bAvif">AVIF</button>
+              <button data-f="image/jpeg">JPG</button>
+              <button data-f="image/png">PNG</button>
+            </div>
+          </div>
+          <div class="opt">
+            <div class="opt-label"><span>Quality</span><span class="opt-val" id="qv2">85</span></div>
+            <input type="range" id="q2" min="10" max="100" value="85" step="5">
+          </div>
+        </div>
+      </div>
+
+      <div class="strip-actions">
+        <button class="btn btn-sm" id="toStep3" disabled>Continue</button>
+        <button class="btn btn-ghost btn-sm" id="backTo1">Back</button>
       </div>
     </div>
-    <div id="fileList"></div>
-  </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step locked" id="s3">
+    <div class="step-head">
+      <span class="step-num">3</span>
+      <span class="step-title" id="s3title">Run it</span>
+      <span class="step-meta" id="s3meta"></span>
+    </div>
+    <div class="step-body">
+      <button class="btn btn-wide" id="run">Compress images</button>
+      <div class="progress" id="prog">
+        <div class="pbar"><span id="pfill"></span></div>
+        <div class="ptext" id="ptext">Working&hellip;</div>
+      </div>
+      <div class="strip-actions" style="margin-top:12px">
+        <button class="btn btn-ghost btn-sm" id="backTo2">Change settings</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step locked" id="s4">
+    <div class="step-head">
+      <span class="step-num">4</span>
+      <span class="step-title">Download</span>
+      <span class="step-meta" id="s4meta"></span>
+    </div>
+    <div class="step-body">
+      <div class="totals" id="totals">
+        <div style="display:flex;gap:26px;flex-wrap:wrap">
+          <div class="tstat"><div class="tnum" id="tSaved">&mdash;</div><div class="tlbl">total saved</div></div>
+          <div class="tstat"><div class="tnum" id="tPct">&mdash;</div><div class="tlbl">smaller</div></div>
+          <div class="tstat"><div class="tnum" id="tCount">&mdash;</div><div class="tlbl">files</div></div>
+        </div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap">
+          <button class="btn btn-sm" id="dlZip">Download all (ZIP)</button>
+          <button class="btn btn-ghost btn-sm" id="startOver">Start over</button>
+        </div>
+      </div>
+      <div id="rows"></div>
+    </div>
+  </section>
 
   <div class="ad-slot">
     <div class="ad-label">Advertisement</div>
     <div id="ad-1"><!-- ad code --></div>
   </div>
 
-  <section class="section" id="how">
-    <h2>How it works</h2>
-    <p>Every image is processed by your own browser. No upload, no server, no queue &mdash; which is why it's instant, unlimited, and why your files stay private.</p>
+  <section class="section">
+    <h2>Why this one is different</h2>
+    <p>Most online compressors upload your images to a server, cap you at 20 files, and limit each to 5&nbsp;MB. This one has no server at all.</p>
     <div class="grid">
-      <div class="card">
-        <h3>Private by default</h3>
-        <p>Images are never transmitted. Disconnect your wifi after the page loads and it still works.</p>
-      </div>
-      <div class="card">
-        <h3>No batch limit</h3>
-        <p>Most tools cap you at 20 files or 5MB each. There's no cap here, because there's no server to pay for.</p>
-      </div>
-      <div class="card">
-        <h3>Compare before you commit</h3>
-        <p>Open any result to drag a slider between the original and the compressed version at full size.</p>
-      </div>
+      <div class="card"><h3>Nothing is uploaded</h3><p>Processing happens in your browser. Turn off your connection after the page loads and it still works.</p></div>
+      <div class="card"><h3>No batch limit</h3><p>Drop a whole folder. There's no file cap and no size cap, because there's no server to pay for.</p></div>
+      <div class="card"><h3>See the trade-off</h3><p>Drag the compare slider on any result to check quality against the original before you download.</p></div>
     </div>
   </section>
 
@@ -236,43 +347,43 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px}
 
   <section class="section">
     <h2>Questions</h2>
-    <details class="faq"><summary>Does compressing reduce image quality?</summary>
-      <p>At quality 80 the difference is invisible to the eye on most photos, while the file drops 60&ndash;80%. Use the compare slider on any result to see exactly what you're trading. Photos tolerate compression well; screenshots and flat graphics do better as PNG or at higher quality.</p></details>
-    <details class="faq"><summary>Which format should I pick?</summary>
-      <p>AVIF is the smallest, roughly 20&ndash;30% below WebP at matching quality, and is supported by every current browser. WebP is the safe default with near-universal support. JPG for maximum compatibility with older software. PNG only when you need transparency or pixel-exact flat graphics.</p></details>
-    <details class="faq"><summary>Are my images uploaded anywhere?</summary>
-      <p>No. Compression happens entirely inside your browser tab. Nothing is transmitted, stored, or logged, and there is no account to create.</p></details>
+    <details class="faq"><summary>Compress or convert &mdash; which do I want?</summary>
+      <p>Compress keeps the file type you already have and just shrinks it. Convert changes the file type, which is usually the bigger win: the same photo as WebP is typically 25&ndash;35% smaller than JPG at matching quality, and AVIF smaller still.</p></details>
+    <details class="faq"><summary>Does compressing hurt quality?</summary>
+      <p>At quality 80 the difference is invisible on most photos while the file drops 60&ndash;80%. Use the compare slider on any result to judge it yourself. Photos handle compression well; flat graphics and screenshots do better as PNG or at higher quality.</p></details>
+    <details class="faq"><summary>Are my images sent to a server?</summary>
+      <p>No. Everything runs inside your browser tab. Nothing is transmitted, stored, or logged, and there is no account to create.</p></details>
     <details class="faq"><summary>Why did my PNG get bigger?</summary>
-      <p>Re-encoding a PNG loses the original file's optimisation, so an already-optimised PNG can grow. Convert it to WebP or AVIF instead &mdash; that's where the real saving is. The tool flags this when it happens.</p></details>
-    <details class="faq"><summary>Is there a file size or count limit?</summary>
-      <p>No. Very large images can be slow on phones since the work happens on your device, but there is no imposed cap on file size or how many you process.</p></details>
+      <p>Re-encoding a PNG discards the original file's optimisation, so an already-optimised PNG can grow. Convert it to WebP or AVIF instead. The tool flags this when it happens.</p></details>
+    <details class="faq"><summary>Is there a limit on file size or count?</summary>
+      <p>No imposed limit. Very large images can be slow on phones because the work happens on your own device.</p></details>
   </section>
 
 </main>
 
 <div class="modal" id="modal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <span class="modal-title" id="mTitle">Compare</span>
-      <button class="modal-x" id="mClose" aria-label="Close">&times;</button>
+  <div class="mbox">
+    <div class="mhead">
+      <span class="mtitle" id="mTitle">Compare</span>
+      <button class="mx" id="mClose" aria-label="Close">&times;</button>
     </div>
     <div class="cmp" id="cmp">
-      <img id="cmpOrig" alt="Original">
-      <div class="cmp-after" id="cmpAfter"><img id="cmpNew" alt="Compressed"></div>
-      <div class="cmp-handle" id="cmpHandle"></div>
-      <span class="cmp-tag l">Original</span>
-      <span class="cmp-tag r">Compressed</span>
+      <img class="cmp-base" id="cmpNew" alt="Compressed result">
+      <div class="cmp-top" id="cmpTop"><img id="cmpOrig" alt="Original"></div>
+      <div class="cmp-line" id="cmpLine"></div>
+      <span class="tag l">Original</span>
+      <span class="tag r">Result</span>
     </div>
-    <div class="modal-foot">
+    <div class="mfoot">
       <span>Original <b id="mOrig"></b></span>
-      <span>Compressed <b id="mNew"></b></span>
+      <span>Result <b id="mNew"></b></span>
       <span>Saved <b id="mSave"></b></span>
     </div>
   </div>
 </div>
 
 <footer>
-  <div class="wrap foot-inner">
+  <div class="wrap foot">
     <span>&copy; 2026 ToolBench &mdash; free browser-based tools</span>
     <span><a href="/privacy.html">Privacy</a> &middot; <a href="/contact.html">Contact</a></span>
   </div>
@@ -280,274 +391,327 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px}
 
 <script>
 (function(){
-  var dz=document.getElementById('dropzone'),
-      input=document.getElementById('fileInput'),
-      controls=document.getElementById('controls'),
-      list=document.getElementById('fileList'),
-      summary=document.getElementById('summary'),
-      qEl=document.getElementById('quality'),
-      qVal=document.getElementById('qVal'),
-      wEl=document.getElementById('maxw'),
-      wVal=document.getElementById('wVal'),
-      fmtWrap=document.getElementById('fmt'),
-      zipBtn=document.getElementById('dlZip');
+  var $=function(id){return document.getElementById(id)};
+  var items=[], mode=null, seq=0;
 
-  var items=[], format='image/webp', seq=0;
+  var s1=$('s1'), s2=$('s2'), s3=$('s3'), s4=$('s4');
+  var dz=$('dz'), fi=$('fi'), strip=$('strip');
 
-  function fmtBytes(b){
+  function bytes(b){
     if(b<1024) return b+' B';
     if(b<1048576) return (b/1024).toFixed(1)+' KB';
     return (b/1048576).toFixed(2)+' MB';
   }
-  function extFor(m){
+  function extOf(m){
     return m==='image/webp'?'webp':m==='image/avif'?'avif':m==='image/png'?'png':'jpg';
   }
-  function baseName(n){ return n.replace(/\.[^.]+$/,''); }
+  function stem(n){ return n.replace(/\.[^.]+$/,''); }
+  function typeOf(f){
+    if(f.type && f.type.indexOf('image/')===0) return f.type;
+    if(/\.png$/i.test(f.name)) return 'image/png';
+    if(/\.webp$/i.test(f.name)) return 'image/webp';
+    if(/\.avif$/i.test(f.name)) return 'image/avif';
+    return 'image/jpeg';
+  }
 
-  (function probeAvif(){
+  /* AVIF capability probe */
+  (function(){
     var c=document.createElement('canvas'); c.width=c.height=1;
     var ok=false;
     try{ ok=c.toDataURL('image/avif').indexOf('data:image/avif')===0; }catch(e){}
-    if(!ok){
-      var b=document.getElementById('btnAvif');
-      b.disabled=true; b.title='This browser cannot encode AVIF yet';
-    }
+    if(!ok){ var b=$('bAvif'); b.disabled=true; b.title='This browser cannot encode AVIF'; }
   })();
 
-  dz.addEventListener('click',function(){input.click()});
-  dz.addEventListener('keydown',function(e){
-    if(e.key==='Enter'||e.key===' '){e.preventDefault();input.click()}
-  });
-  ['dragenter','dragover'].forEach(function(ev){
-    dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('drag')});
-  });
-  ['dragleave','drop'].forEach(function(ev){
-    dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove('drag')});
-  });
-  dz.addEventListener('drop',function(e){ handle(e.dataTransfer.files) });
-  input.addEventListener('change',function(e){ handle(e.target.files); input.value=''; });
-
-  qEl.addEventListener('input',function(){ qVal.textContent=qEl.value; recompress(); });
-  wEl.addEventListener('input',function(){
-    wVal.textContent = wEl.value==='0' ? 'Original' : wEl.value+'px';
-    recompress();
-  });
-  fmtWrap.addEventListener('click',function(e){
-    var b=e.target.closest('button');
-    if(!b||b.disabled) return;
-    fmtWrap.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
-    b.classList.add('on'); format=b.dataset.f; recompress();
-  });
-
-  document.getElementById('clearAll').addEventListener('click',function(){
-    items.forEach(function(it){
-      if(it.url) URL.revokeObjectURL(it.url);
-      if(it.origUrl) URL.revokeObjectURL(it.origUrl);
+  /* ── step control ── */
+  function goStep(n){
+    [s1,s2,s3,s4].forEach(function(el,i){
+      var idx=i+1;
+      el.classList.remove('active','locked','collapsed');
+      if(idx<n){ el.classList.add('done','collapsed'); }
+      else if(idx===n){ el.classList.add('active'); el.classList.remove('done'); }
+      else { el.classList.add('locked'); el.classList.remove('done'); }
     });
-    items=[]; list.innerHTML='';
-    summary.classList.remove('on'); controls.classList.remove('on');
+    var top=({1:s1,2:s2,3:s3,4:s4})[n];
+    if(top && n>1) top.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  /* ── STEP 1: files ── */
+  dz.addEventListener('click',function(){fi.click()});
+  dz.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();fi.click()} });
+  ['dragenter','dragover'].forEach(function(ev){ dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('drag')}) });
+  ['dragleave','drop'].forEach(function(ev){ dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove('drag')}) });
+  dz.addEventListener('drop',function(e){ addFiles(e.dataTransfer.files) });
+  fi.addEventListener('change',function(e){ addFiles(e.target.files); fi.value=''; });
+  $('addMore').addEventListener('click',function(){ fi.click() });
+
+  function addFiles(fl){
+    var arr=Array.prototype.slice.call(fl).filter(function(f){
+      return (f.type&&f.type.indexOf('image/')===0) || /\.(heic|heif)$/i.test(f.name);
+    });
+    if(!arr.length) return;
+    arr.forEach(function(f){
+      items.push({id:++seq,file:f,srcType:typeOf(f),origUrl:URL.createObjectURL(f),blob:null,url:null,outType:null});
+    });
+    paintStrip();
+  }
+
+  function paintStrip(){
+    strip.innerHTML='';
+    var show=items.slice(0,14);
+    show.forEach(function(it){
+      var c=document.createElement('div');
+      c.className='chip';
+      c.innerHTML='<img alt=""><button title="Remove" aria-label="Remove">&times;</button>';
+      c.querySelector('img').src=it.origUrl;
+      c.querySelector('button').addEventListener('click',function(){ dropItem(it) });
+      strip.appendChild(c);
+    });
+    if(items.length>show.length){
+      var m=document.createElement('div');
+      m.className='chip more-chip';
+      m.textContent='+'+(items.length-show.length);
+      strip.appendChild(m);
+    }
+    var total=items.reduce(function(s,i){return s+i.file.size},0);
+    $('s1meta').textContent=items.length? items.length+' file'+(items.length>1?'s':'')+' \u00B7 '+bytes(total) : '';
+    $('s1actions').style.display=items.length?'flex':'none';
+  }
+
+  function dropItem(it){
+    URL.revokeObjectURL(it.origUrl);
+    if(it.url) URL.revokeObjectURL(it.url);
+    items=items.filter(function(x){return x!==it});
+    paintStrip();
+    if(!items.length) goStep(1);
+  }
+
+  $('clearAll').addEventListener('click',resetAll);
+  function resetAll(){
+    items.forEach(function(it){
+      URL.revokeObjectURL(it.origUrl);
+      if(it.url) URL.revokeObjectURL(it.url);
+    });
+    items=[]; mode=null;
+    strip.innerHTML=''; $('rows').innerHTML='';
+    $('s1meta').textContent=''; $('s2meta').textContent=''; $('s3meta').textContent=''; $('s4meta').textContent='';
+    $('s1actions').style.display='none';
+    document.querySelectorAll('.choice').forEach(function(b){b.classList.remove('on')});
+    $('optCompress').classList.remove('on'); $('optConvert').classList.remove('on');
+    $('toStep3').disabled=true;
+    goStep(1);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  $('startOver').addEventListener('click',resetAll);
+
+  $('toStep2').addEventListener('click',function(){ if(items.length) goStep(2) });
+  $('backTo1').addEventListener('click',function(){ goStep(1) });
+  $('backTo2').addEventListener('click',function(){ goStep(2) });
+
+  /* ── STEP 2: mode + options ── */
+  document.querySelectorAll('.choice').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.choice').forEach(function(b){b.classList.remove('on')});
+      btn.classList.add('on');
+      mode=btn.dataset.mode;
+      $('optCompress').classList.toggle('on',mode==='compress');
+      $('optConvert').classList.toggle('on',mode==='convert');
+      $('toStep3').disabled=false;
+      $('s2meta').textContent = mode==='compress' ? 'Compress' : 'Convert';
+    });
   });
 
-  zipBtn.addEventListener('click',function(){
-    var done=items.filter(function(i){return i.blob});
-    if(!done.length) return;
-    zipBtn.disabled=true; zipBtn.textContent='Zipping\u2026';
+  $('q').addEventListener('input',function(){ $('qv').textContent=this.value });
+  $('q2').addEventListener('input',function(){ $('qv2').textContent=this.value });
+  $('w').addEventListener('input',function(){ $('wv').textContent=this.value==='0'?'Original':this.value+'px' });
+  $('fmt').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b||b.disabled) return;
+    $('fmt').querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+  });
+
+  $('toStep3').addEventListener('click',function(){
+    if(!mode) return;
+    var lbl = mode==='compress' ? 'Compress' : 'Convert';
+    $('s3title').textContent = lbl+' '+items.length+' image'+(items.length>1?'s':'');
+    $('run').textContent = lbl+' image'+(items.length>1?'s':'');
+    goStep(3);
+  });
+
+  /* ── STEP 3: run ── */
+  $('run').addEventListener('click',function(){
+    var btn=this;
+    btn.disabled=true;
+    $('prog').classList.add('on');
+    var targetFmt = mode==='convert'
+      ? $('fmt').querySelector('button.on').dataset.f
+      : null;
+    var quality = mode==='convert'
+      ? parseInt($('q2').value,10)/100
+      : parseInt($('q').value,10)/100;
+    var maxW = mode==='compress' ? parseInt($('w').value,10) : 0;
+
+    var done=0;
+    function tick(){
+      done++;
+      var pct=Math.round(done/items.length*100);
+      $('pfill').style.width=pct+'%';
+      $('ptext').textContent=done+' of '+items.length+' processed';
+      if(done===items.length){
+        setTimeout(function(){
+          btn.disabled=false;
+          $('prog').classList.remove('on');
+          $('pfill').style.width='0';
+          $('s3meta').textContent='Done';
+          renderResults();
+          goStep(4);
+        },220);
+      }
+    }
+    items.forEach(function(it){ process(it,targetFmt,quality,maxW,tick) });
+  });
+
+  function process(item,targetFmt,quality,maxW,done){
+    var img=new Image();
+    img.onload=function(){
+      var w=img.naturalWidth, h=img.naturalHeight;
+      if(maxW>0 && w>maxW){ h=Math.round(h*(maxW/w)); w=maxW; }
+      var c=document.createElement('canvas');
+      c.width=w; c.height=h;
+      var ctx=c.getContext('2d');
+      var out = targetFmt || item.srcType;
+      if(out==='image/jpeg'){ ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,w,h); }
+      ctx.drawImage(img,0,0,w,h);
+      c.toBlob(function(blob){
+        if(blob){
+          if(item.url) URL.revokeObjectURL(item.url);
+          item.blob=blob; item.url=URL.createObjectURL(blob);
+          item.outType=out; item.outW=w; item.outH=h;
+        } else { item.error='Could not encode'; }
+        done();
+      }, out, out==='image/png'?undefined:quality);
+    };
+    img.onerror=function(){
+      item.error = /\.(heic|heif)$/i.test(item.file.name)
+        ? 'HEIC not supported by this browser'
+        : 'Could not read this file';
+      done();
+    };
+    img.src=item.origUrl;
+  }
+
+  /* ── STEP 4: results ── */
+  function renderResults(){
+    var box=$('rows'); box.innerHTML='';
+    items.forEach(function(it){
+      var row=document.createElement('div');
+      row.className='row';
+      row.innerHTML='<img class="row-th" alt="">'+
+        '<div class="row-main"><div class="row-name"></div><div class="row-meta"></div></div>';
+      row.querySelector('.row-th').src=it.origUrl;
+      row.querySelector('.row-name').textContent=it.file.name;
+      var meta=row.querySelector('.row-meta');
+
+      if(it.error){
+        meta.innerHTML='<span style="color:var(--warn)">'+it.error+'</span>';
+      } else {
+        var o=it.file.size, n=it.blob.size, pct=Math.round((1-n/o)*100), grew=pct<=0;
+        meta.innerHTML='<span class="old">'+bytes(o)+'</span><span>\u2192 '+bytes(n)+'</span>'+
+          (grew?'<span style="color:var(--warn)">+'+Math.abs(pct)+'% \u2014 try WebP</span>'
+               :'<span class="save">\u2212'+pct+'%</span>')+
+          '<span>'+it.outW+'\u00D7'+it.outH+'</span>';
+        var cb=document.createElement('button');
+        cb.className='lnk'; cb.textContent='compare';
+        cb.addEventListener('click',function(){ openCompare(it) });
+        meta.appendChild(cb);
+
+        var a=document.createElement('a');
+        a.className='row-dl'; a.textContent='Download';
+        a.href=it.url; a.download=stem(it.file.name)+'.'+extOf(it.outType);
+        row.appendChild(a);
+        row.querySelector('.row-th').addEventListener('click',function(){ openCompare(it) });
+      }
+      box.appendChild(row);
+    });
+
+    var ok=items.filter(function(i){return i.blob});
+    var o=ok.reduce(function(s,i){return s+i.file.size},0);
+    var n=ok.reduce(function(s,i){return s+i.blob.size},0);
+    $('tSaved').textContent=bytes(Math.max(0,o-n));
+    $('tPct').textContent=(o?Math.max(0,Math.round((1-n/o)*100)):0)+'%';
+    $('tCount').textContent=ok.length;
+    $('s4meta').textContent=ok.length+' ready';
+  }
+
+  $('dlZip').addEventListener('click',function(){
+    var ok=items.filter(function(i){return i.blob});
+    if(!ok.length) return;
+    var b=this; b.disabled=true; b.textContent='Zipping\u2026';
     var zip=new JSZip(), used={};
-    done.forEach(function(it){
-      var stem=baseName(it.file.name), ext=extFor(it.outType), name=stem+'.'+ext;
-      if(used[name]){ used[name]++; name=stem+'-'+used[name]+'.'+ext; } else { used[name]=1; }
+    ok.forEach(function(it){
+      var base=stem(it.file.name), ext=extOf(it.outType), name=base+'.'+ext;
+      if(used[name]){ used[name]++; name=base+'-'+used[name]+'.'+ext; } else used[name]=1;
       zip.file(name,it.blob);
     });
     zip.generateAsync({type:'blob'}).then(function(out){
       var url=URL.createObjectURL(out);
       var a=document.createElement('a');
-      a.href=url; a.download='compressed-images.zip';
+      a.href=url; a.download='images.zip';
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(function(){URL.revokeObjectURL(url)},2000);
-      zipBtn.disabled=false; zipBtn.textContent='Download ZIP';
+      b.disabled=false; b.textContent='Download all (ZIP)';
     }).catch(function(){
-      zipBtn.textContent='ZIP failed';
-      setTimeout(function(){zipBtn.disabled=false;zipBtn.textContent='Download ZIP'},2200);
+      b.textContent='ZIP failed';
+      setTimeout(function(){b.disabled=false;b.textContent='Download all (ZIP)'},2000);
     });
   });
 
-  function handle(fileList){
-    var files=Array.prototype.slice.call(fileList).filter(function(f){
-      return f.type.indexOf('image/')===0 || /\.(heic|heif)$/i.test(f.name);
-    });
-    if(!files.length) return;
-    files.forEach(function(f){
-      var item={id:++seq,file:f,blob:null,url:null,origUrl:URL.createObjectURL(f),outType:format,el:null};
-      items.push(item);
-      renderRow(item);
-      compress(item);
-    });
-    controls.classList.add('on');
-    summary.classList.add('on');
-  }
+  /* ── compare slider ── */
+  var modal=$('modal'), cmp=$('cmp'), cmpTop=$('cmpTop'),
+      cmpLine=$('cmpLine'), cmpOrig=$('cmpOrig'), cmpNew=$('cmpNew'), split=50;
 
-  function renderRow(item){
-    var row=document.createElement('div');
-    row.className='file';
-    row.innerHTML='<img class="thumb" alt="">'+
-      '<div class="f-main">'+
-        '<div class="f-name"></div>'+
-        '<div class="bar"><div class="bar-fill"></div></div>'+
-        '<div class="f-meta"><span class="f-wait">compressing\u2026</span></div>'+
-      '</div>'+
-      '<div class="f-actions"><span class="f-wait">\u2026</span>'+
-      '<button class="f-x" title="Remove" aria-label="Remove">&times;</button></div>';
-    row.querySelector('.f-name').textContent=item.file.name;
-    row.querySelector('.thumb').src=item.origUrl;
-    row.querySelector('.f-x').addEventListener('click',function(){ removeItem(item); });
-    list.appendChild(row);
-    item.el=row;
-  }
-
-  function removeItem(item){
-    if(item.url) URL.revokeObjectURL(item.url);
-    if(item.origUrl) URL.revokeObjectURL(item.origUrl);
-    item.el.remove();
-    items=items.filter(function(i){return i!==item});
-    if(!items.length){ summary.classList.remove('on'); controls.classList.remove('on'); }
-    else updateSummary();
-  }
-
-  function compress(item){
-    var img=new Image();
-    img.onload=function(){
-      var w=img.naturalWidth, h=img.naturalHeight;
-      var maxW=parseInt(wEl.value,10);
-      if(maxW>0 && w>maxW){ h=Math.round(h*(maxW/w)); w=maxW; }
-      var c=document.createElement('canvas');
-      c.width=w; c.height=h;
-      var ctx=c.getContext('2d');
-      if(format==='image/jpeg'){ ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,w,h); }
-      ctx.drawImage(img,0,0,w,h);
-      var q=parseInt(qEl.value,10)/100;
-      var outType=format;
-      c.toBlob(function(blob){
-        if(!blob){ showError(item,'Could not encode'); return; }
-        if(item.url) URL.revokeObjectURL(item.url);
-        item.blob=blob; item.url=URL.createObjectURL(blob);
-        item.outType=outType; item.outW=w; item.outH=h;
-        paintRow(item); updateSummary();
-      }, outType, outType==='image/png'?undefined:q);
-    };
-    img.onerror=function(){
-      showError(item, /\.(heic|heif)$/i.test(item.file.name)
-        ? 'HEIC not supported by this browser'
-        : 'Could not read this file');
-    };
-    img.src=item.origUrl;
-  }
-
-  function showError(item,msg){
-    var meta=item.el.querySelector('.f-meta');
-    meta.innerHTML='<span style="color:var(--warn)">'+msg+'</span>';
-    var w=item.el.querySelector('.f-actions .f-wait');
-    if(w) w.remove();
-  }
-
-  function paintRow(item){
-    var orig=item.file.size, out=item.blob.size;
-    var pct=Math.round((1-out/orig)*100);
-    var grew=pct<=0;
-    var row=item.el;
-    var fill=row.querySelector('.bar-fill');
-    fill.style.width=(grew?100:Math.max(4,100-pct))+'%';
-    fill.style.background=grew?'var(--warn)':'var(--accent)';
-
-    var meta=row.querySelector('.f-meta');
-    meta.innerHTML='<span class="old">'+fmtBytes(orig)+'</span>'+
-      '<span>\u2192 '+fmtBytes(out)+'</span>'+
-      (grew?'<span style="color:var(--warn)">+'+Math.abs(pct)+'% \u2014 try WebP</span>'
-           :'<span class="save">\u2212'+pct+'%</span>')+
-      '<span>'+item.outW+'\u00D7'+item.outH+'</span>';
-    var cmpBtn=document.createElement('button');
-    cmpBtn.className='f-compare'; cmpBtn.textContent='compare';
-    cmpBtn.addEventListener('click',function(){ openCompare(item); });
-    meta.appendChild(cmpBtn);
-
-    var actions=row.querySelector('.f-actions');
-    var link=actions.querySelector('.f-dl');
-    if(!link){
-      link=document.createElement('a');
-      link.className='f-dl'; link.textContent='Download';
-      var waiting=actions.querySelector('.f-wait');
-      if(waiting) actions.replaceChild(link,waiting);
-      else actions.insertBefore(link,actions.firstChild);
-    }
-    link.href=item.url;
-    link.download=baseName(item.file.name)+'.'+extFor(item.outType);
-    row.querySelector('.thumb').onclick=function(){ openCompare(item); };
-  }
-
-  function recompress(){
-    items.forEach(function(it){ if(it.origUrl) compress(it); });
-  }
-
-  function updateSummary(){
-    var done=items.filter(function(i){return i.blob});
-    if(!done.length){ return; }
-    var orig=done.reduce(function(s,i){return s+i.file.size},0);
-    var out=done.reduce(function(s,i){return s+i.blob.size},0);
-    document.getElementById('sumSaved').textContent=fmtBytes(Math.max(0,orig-out));
-    document.getElementById('sumPct').textContent=Math.max(0,Math.round((1-out/orig)*100))+'%';
-    document.getElementById('sumCount').textContent=done.length;
-  }
-
-  var modal=document.getElementById('modal'),
-      cmp=document.getElementById('cmp'),
-      cmpAfter=document.getElementById('cmpAfter'),
-      cmpHandle=document.getElementById('cmpHandle'),
-      cmpOrig=document.getElementById('cmpOrig'),
-      cmpNew=document.getElementById('cmpNew'),
-      split=50;
-
-  function openCompare(item){
-    if(!item.blob) return;
-    document.getElementById('mTitle').textContent=item.file.name;
-    document.getElementById('mOrig').textContent=fmtBytes(item.file.size);
-    document.getElementById('mNew').textContent=fmtBytes(item.blob.size);
-    var pct=Math.round((1-item.blob.size/item.file.size)*100);
-    document.getElementById('mSave').textContent=(pct>0?pct:0)+'%';
-    cmpOrig.src=item.origUrl;
-    cmpNew.src=item.url;
+  function openCompare(it){
+    if(!it.blob) return;
+    $('mTitle').textContent=it.file.name;
+    $('mOrig').textContent=bytes(it.file.size);
+    $('mNew').textContent=bytes(it.blob.size);
+    var pct=Math.round((1-it.blob.size/it.file.size)*100);
+    $('mSave').textContent=(pct>0?pct:0)+'%';
+    cmpNew.src=it.url;
+    cmpOrig.src=it.origUrl;
     modal.classList.add('on');
-    cmpOrig.onload=function(){ sizeOverlay(); setSplit(50); };
-    setTimeout(function(){ sizeOverlay(); setSplit(50); },40);
+    cmpNew.onload=function(){ fit(); setSplit(50); };
+    if(cmpNew.complete){ fit(); setSplit(50); }
   }
-  function sizeOverlay(){
-    cmpNew.style.width=cmp.clientWidth+'px';
-    cmpNew.style.height=cmpOrig.clientHeight+'px';
+  function fit(){
+    var wpx=cmp.clientWidth;
+    var hpx=cmpNew.clientHeight || cmpNew.naturalHeight;
+    cmpOrig.style.width=wpx+'px';
+    cmpOrig.style.height=hpx+'px';
+    cmpTop.style.height=hpx+'px';
   }
-  function closeCompare(){ modal.classList.remove('on'); }
-  function setSplit(pct){
-    split=Math.max(0,Math.min(100,pct));
-    cmpAfter.style.width=split+'%';
-    cmpHandle.style.left=split+'%';
+  function setSplit(p){
+    split=Math.max(0,Math.min(100,p));
+    cmpTop.style.width=split+'%';
+    cmpLine.style.left=split+'%';
   }
-  function moveFrom(clientX){
+  function fromX(x){
     var r=cmp.getBoundingClientRect();
-    setSplit(((clientX-r.left)/r.width)*100);
+    setSplit(((x-r.left)/r.width)*100);
   }
-  var dragging=false;
+  var drag=false;
   cmp.addEventListener('pointerdown',function(e){
-    dragging=true;
-    try{cmp.setPointerCapture(e.pointerId)}catch(err){}
-    moveFrom(e.clientX);
+    drag=true; try{cmp.setPointerCapture(e.pointerId)}catch(err){} fromX(e.clientX);
   });
-  cmp.addEventListener('pointermove',function(e){ if(dragging) moveFrom(e.clientX) });
-  cmp.addEventListener('pointerup',function(){dragging=false});
-  cmp.addEventListener('pointercancel',function(){dragging=false});
-  window.addEventListener('resize',function(){
-    if(modal.classList.contains('on')){ sizeOverlay(); setSplit(split); }
+  cmp.addEventListener('pointermove',function(e){ if(drag) fromX(e.clientX) });
+  ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
+    cmp.addEventListener(ev,function(){ drag=false });
   });
+  window.addEventListener('resize',function(){ if(modal.classList.contains('on')){ fit(); setSplit(split); } });
 
-  document.getElementById('mClose').addEventListener('click',closeCompare);
-  modal.addEventListener('click',function(e){ if(e.target===modal) closeCompare() });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeCompare() });
+  function closeModal(){ modal.classList.remove('on') }
+  $('mClose').addEventListener('click',closeModal);
+  modal.addEventListener('click',function(e){ if(e.target===modal) closeModal() });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal() });
 })();
 </script>
 
