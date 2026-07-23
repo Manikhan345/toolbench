@@ -3,715 +3,739 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image Compressor &amp; Converter — PNG, JPG, WebP, AVIF | Free Online</title>
-<meta name="description" content="Compress or convert images step by step in your browser. Unlimited batch, PNG, JPG, WebP and AVIF. Nothing uploads — your files never leave your device.">
+<title>Image Converter — Convert JPG, PNG, WebP &amp; AVIF Online Free</title>
+<meta name="description" content="Free online image converter. Convert JPG, PNG, WebP and AVIF in your browser. No upload, no sign-up, no file size limit — your images never leave your device.">
 <link rel="canonical" href="https://YOURDOMAIN.com/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E1116'/%3E%3Cpath d='M8 20l5-6 4 4 3-3 4 5z' fill='%2300E5A0'/%3E%3Ccircle cx='12' cy='11' r='2' fill='%2300E5A0'/%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23F97316'/%3E%3Cpath d='M9 21l4.5-5.5L17 19l3-3.5L23 21z' fill='%23fff'/%3E%3Ccircle cx='12.5' cy='11.5' r='2' fill='%23fff'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{
-  --bg:#0E1116; --surface:#161B22; --surface-2:#1C2230; --line:#262D3A;
-  --text:#E8EDF4; --dim:#8B96A8; --faint:#5A6474;
-  --accent:#00E5A0; --accent-dim:rgba(0,229,160,.12); --warn:#FFB020;
-  --r:14px;
-  --fd:'Sora',system-ui,sans-serif;
-  --fm:'IBM Plex Mono',ui-monospace,monospace;
+  --ink:#141821; --ink-2:#3E4757; --ink-3:#7B8598; --ink-4:#AEB6C4;
+  --bg:#FFFFFF; --bg-2:#F6F7FA; --bg-3:#EDEFF4;
+  --line:#E2E6ED;
+  --brand:#F97316; --brand-dk:#EA6407; --brand-lt:#FFF3EA;
+  --ok:#16A34A; --err:#DC2626;
+  --r:12px;
+  --f:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --sh:0 1px 2px rgba(20,24,33,.05),0 4px 14px rgba(20,24,33,.06);
+  --sh-lg:0 12px 40px rgba(20,24,33,.14);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:var(--fd);line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:940px;margin:0 auto;padding:0 20px}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+button{font-family:var(--f)}
 
-header{border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(14,17,22,.9);backdrop-filter:blur(10px);z-index:50}
-.head-inner{display:flex;align-items:center;justify-content:space-between;height:60px}
-.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:1rem;text-decoration:none;color:var(--text)}
-.logo-mark{width:26px;height:26px;border-radius:7px;background:var(--accent-dim);border:1px solid rgba(0,229,160,.3);display:grid;place-items:center;color:var(--accent);font-size:.85rem}
-.head-note{font-family:var(--fm);font-size:.72rem;color:var(--dim)}
+/* header */
+header{border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:60}
+.hd{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+.logo-m{width:28px;height:28px;border-radius:8px;background:var(--brand);display:grid;place-items:center;color:#fff;font-size:.9rem;font-weight:700}
+.hd-nav{display:flex;gap:6px;align-items:center}
+.hd-nav a{font-size:.87rem;font-weight:500;color:var(--ink-2);text-decoration:none;padding:7px 12px;border-radius:8px}
+.hd-nav a:hover{background:var(--bg-2);color:var(--ink)}
+.hd-badge{font-size:.75rem;font-weight:600;color:var(--ok);background:#F0FDF4;border:1px solid #BBF7D0;padding:5px 11px;border-radius:99px}
 
-.hero{padding:44px 0 28px;text-align:center}
-h1{font-size:clamp(1.8rem,4.6vw,2.7rem);font-weight:700;letter-spacing:-.03em;line-height:1.1;margin-bottom:12px}
-h1 em{font-style:normal;color:var(--accent)}
-.sub{color:var(--dim);max-width:500px;margin:0 auto;font-size:.98rem}
+/* hero */
+.hero{padding:46px 0 10px;text-align:center}
+h1{font-size:clamp(1.9rem,4.6vw,2.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.14;margin-bottom:10px}
+.hero p{color:var(--ink-2);max-width:520px;margin:0 auto;font-size:1rem}
 
-/* ── Stepper ── */
-.step{
-  border:1px solid var(--line);border-radius:var(--r);
-  background:var(--surface);margin-bottom:14px;overflow:hidden;
-  transition:border-color .2s,opacity .2s;
-}
-.step.locked{opacity:.45;pointer-events:none}
-.step.active{border-color:rgba(0,229,160,.4)}
-.step.done .step-num{background:var(--accent);color:#04140E;border-color:var(--accent)}
-.step-head{display:flex;align-items:center;gap:13px;padding:15px 18px}
-.step-num{
-  width:27px;height:27px;flex-shrink:0;border-radius:50%;
-  border:1px solid var(--line);background:var(--surface-2);
-  display:grid;place-items:center;
-  font-family:var(--fm);font-size:.78rem;font-weight:600;color:var(--dim);
-}
-.step.active .step-num{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
-.step-title{font-weight:600;font-size:.98rem;flex:1}
-.step-meta{font-family:var(--fm);font-size:.75rem;color:var(--dim)}
-.step-body{padding:0 18px 18px;display:none}
-.step.active .step-body,.step.done .step-body{display:block}
-.step.done.collapsed .step-body{display:none}
+/* dropzone */
+.dz{margin:26px 0 0;border:2px dashed #C9D0DC;border-radius:16px;background:var(--bg-2);padding:56px 22px;text-align:center;transition:.18s}
+.dz.drag{border-color:var(--brand);background:var(--brand-lt)}
+.choose{position:relative;display:inline-flex;box-shadow:var(--sh);border-radius:11px}
+.choose-main{display:flex;align-items:center;gap:10px;background:var(--brand);color:#fff;border:none;font-size:1.02rem;font-weight:700;padding:15px 26px;border-radius:11px 0 0 11px;cursor:pointer}
+.choose-main:hover{background:var(--brand-dk)}
+.choose-caret{background:var(--brand);color:#fff;border:none;border-left:1px solid rgba(255,255,255,.28);padding:0 15px;border-radius:0 11px 11px 0;cursor:pointer;font-size:.8rem;display:grid;place-items:center}
+.choose-caret:hover{background:var(--brand-dk)}
+.menu{position:absolute;top:calc(100% + 8px);left:0;min-width:230px;background:var(--brand);border-radius:12px;box-shadow:var(--sh-lg);padding:7px;display:none;z-index:40;text-align:left}
+.menu.on{display:block}
+.menu button{display:flex;align-items:center;gap:11px;width:100%;background:none;border:none;color:#fff;font-size:.9rem;font-weight:500;padding:11px 13px;border-radius:8px;cursor:pointer;text-align:left}
+.menu button:hover:not(:disabled){background:rgba(255,255,255,.16)}
+.menu button:disabled{opacity:.5;cursor:not-allowed}
+.menu .ic{width:17px;text-align:center;flex-shrink:0}
+.menu .soon{margin-left:auto;font-size:.66rem;opacity:.8;font-weight:600}
+.dz-note{margin-top:15px;font-size:.88rem;color:var(--ink-2)}
+.dz-note b{color:var(--ink);font-weight:600}
+.dz-sub{margin-top:5px;font-size:.79rem;color:var(--ink-3)}
+.dz-sub a{color:var(--ink-2)}
 
-/* Dropzone */
-.dz{border:1.5px dashed var(--line);border-radius:11px;background:var(--bg);padding:38px 20px;text-align:center;cursor:pointer;transition:.18s}
-.dz:hover,.dz.drag{border-color:var(--accent);background:var(--surface-2)}
-.dz-icon{font-size:1.7rem;margin-bottom:9px}
-.dz-t{font-weight:600;margin-bottom:4px}
-.dz-h{color:var(--dim);font-size:.84rem}
-.dz-f{font-family:var(--fm);font-size:.7rem;color:var(--faint);margin-top:12px;letter-spacing:.05em}
+/* file panel */
+.panel{display:none;margin-top:24px;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:visible;background:var(--bg)}
+.panel.on{display:block}
+.panel-top{padding:13px 15px;border-bottom:1px solid var(--line)}
+.addmore{position:relative;display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:visible;background:var(--bg-2)}
+.addmore-main{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--brand);font-weight:600;font-size:.88rem;padding:10px 15px;cursor:pointer}
+.addmore-main:hover{background:var(--bg-3)}
+.addmore-caret{background:none;border:none;border-left:1px solid var(--line);color:var(--brand);padding:0 12px;cursor:pointer;font-size:.72rem}
+.addmore-caret:hover{background:var(--bg-3)}
+.addmore .menu{background:var(--bg);border:1px solid var(--line)}
+.addmore .menu button{color:var(--ink-2)}
+.addmore .menu button:hover:not(:disabled){background:var(--bg-2)}
 
-/* Thumb strip */
-.strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.chip{position:relative;width:58px;height:58px;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:var(--surface-2)}
-.chip img{width:100%;height:100%;object-fit:cover;display:block}
-.chip button{position:absolute;top:2px;right:2px;width:17px;height:17px;border-radius:50%;border:none;background:rgba(5,7,10,.8);color:#fff;font-size:.7rem;line-height:1;cursor:pointer;display:grid;place-items:center}
-.chip button:hover{background:var(--warn);color:#111}
-.more-chip{display:grid;place-items:center;font-family:var(--fm);font-size:.74rem;color:var(--dim)}
-.strip-actions{display:flex;gap:10px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.frow{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.frow:last-of-type{border-bottom:none}
+.fthumb{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--bg-3);flex-shrink:0}
+.finfo{flex:1;min-width:0}
+.fname{font-size:.92rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fsize{font-size:.83rem;color:var(--ink-3);margin-top:1px}
+.fctl{display:flex;align-items:center;gap:11px;flex-shrink:0}
+.olabel{font-size:.87rem;color:var(--ink-2);font-weight:500}
+.opick{display:flex;align-items:center;gap:9px;background:var(--bg);border:1.5px solid var(--brand);color:var(--brand);font-weight:700;font-size:.87rem;padding:9px 13px;border-radius:9px;cursor:pointer}
+.opick:hover{background:var(--brand-lt)}
+.iconbtn{width:34px;height:34px;border-radius:8px;border:none;background:none;color:var(--ink-3);cursor:pointer;display:grid;place-items:center;font-size:1rem}
+.iconbtn:hover{background:var(--bg-2);color:var(--ink-2)}
+.iconbtn.x:hover{color:var(--err)}
 
-/* Action choice */
-.choices{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.choice{
-  text-align:left;padding:15px 16px;border-radius:11px;cursor:pointer;
-  background:var(--bg);border:1px solid var(--line);color:var(--text);
-  font-family:var(--fd);transition:.15s;
-}
-.choice:hover{border-color:var(--dim)}
-.choice.on{border-color:var(--accent);background:var(--accent-dim)}
-.choice-t{font-weight:600;font-size:.94rem;margin-bottom:3px;display:flex;align-items:center;gap:7px}
-.choice.on .choice-t{color:var(--accent)}
-.choice-d{font-size:.82rem;color:var(--dim);line-height:1.45}
+.panel-foot{display:flex;align-items:stretch;justify-content:space-between;background:var(--bg-2);border-top:1px solid var(--line)}
+.added{padding:16px 18px;font-size:.9rem;color:var(--ink-2);display:flex;align-items:center}
+.added b{color:var(--brand);font-weight:700;margin:0 4px}
+.convert{display:flex;align-items:center;gap:10px;background:var(--brand);color:#fff;border:none;font-size:1rem;font-weight:700;padding:18px 34px;cursor:pointer}
+.convert:hover{background:var(--brand-dk)}
+.convert:disabled{opacity:.55;cursor:not-allowed}
 
-.opts{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
-.opts.on{display:block}
-.opt-row{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end}
-.opt{flex:1;min-width:170px}
-.opt-label{display:flex;justify-content:space-between;align-items:baseline;font-size:.78rem;color:var(--dim);margin-bottom:7px}
-.opt-val{font-family:var(--fm);color:var(--accent);font-weight:500}
-input[type=range]{width:100%;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--surface-2);outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer;border:none}
-input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer;border:none}
-.seg{display:flex;gap:5px;flex-wrap:wrap}
-.seg button{flex:1;min-width:54px;padding:8px;font-family:var(--fm);font-size:.74rem;font-weight:500;background:var(--surface-2);color:var(--dim);border:1px solid var(--line);border-radius:8px;cursor:pointer;transition:.15s}
-.seg button:hover{color:var(--text)}
-.seg button.on{background:var(--accent-dim);color:var(--accent);border-color:rgba(0,229,160,.35)}
-.seg button[disabled]{opacity:.32;cursor:not-allowed}
+/* per-file settings drawer */
+.fset{display:none;padding:0 16px 16px;border-bottom:1px solid var(--line);background:var(--bg-2)}
+.fset.on{display:block}
+.fset-in{padding-top:14px;display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end}
+.fld{flex:1;min-width:180px}
+.fld-l{display:flex;justify-content:space-between;font-size:.79rem;color:var(--ink-2);font-weight:500;margin-bottom:7px}
+.fld-l b{color:var(--brand);font-weight:700}
+input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:3px;background:var(--bg-3);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--brand);cursor:pointer;border:2px solid #fff;box-shadow:var(--sh)}
+input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--brand);cursor:pointer;border:2px solid #fff}
+.qhint{display:flex;justify-content:space-between;font-size:.71rem;color:var(--ink-3);margin-top:6px}
+.num{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-family:var(--f);font-size:.87rem;color:var(--ink)}
 
-/* Buttons */
-.btn{font-family:var(--fd);font-weight:600;font-size:.88rem;padding:12px 22px;border-radius:9px;border:none;cursor:pointer;transition:.15s;background:var(--accent);color:#04140E}
-.btn:hover{filter:brightness(1.08)}
-.btn[disabled]{opacity:.55;cursor:not-allowed;filter:none}
-.btn-ghost{background:transparent;color:var(--dim);border:1px solid var(--line)}
-.btn-ghost:hover{color:var(--text);border-color:var(--dim)}
-.btn-wide{width:100%;padding:14px;font-size:.95rem}
-.btn-sm{padding:8px 14px;font-size:.8rem}
+/* format modal */
+.ovl{position:fixed;inset:0;background:rgba(20,24,33,.5);z-index:90;display:none;align-items:center;justify-content:center;padding:20px}
+.ovl.on{display:flex}
+.fmodal{background:var(--bg);border-radius:14px;box-shadow:var(--sh-lg);width:100%;max-width:540px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.fsearch{padding:16px 16px 12px}
+.fsearch input{width:100%;padding:12px 14px;border:none;background:var(--bg-3);border-radius:10px;font-family:var(--f);font-size:.92rem;color:var(--ink);outline:none}
+.fsearch input::placeholder{color:var(--ink-3)}
+.fbody{display:flex;gap:0;overflow:hidden;flex:1}
+.fcats{width:135px;flex-shrink:0;padding:4px 12px 16px;border-right:1px solid var(--line)}
+.fcat{display:block;width:100%;text-align:left;background:none;border:none;padding:9px 10px;border-radius:8px;font-size:.88rem;font-weight:600;color:var(--ink-3);cursor:pointer}
+.fcat:hover{background:var(--bg-2);color:var(--ink-2)}
+.fcat.on{color:var(--brand);background:var(--brand-lt)}
+.fgrid{flex:1;padding:4px 16px 16px;overflow-y:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:9px;align-content:start}
+.fopt{padding:13px 6px;border:1px solid var(--line);border-radius:9px;background:var(--bg);font-size:.86rem;font-weight:600;color:var(--ink-2);cursor:pointer;text-align:center}
+.fopt:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+.fopt.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.fopt:disabled{opacity:.4;cursor:not-allowed;background:var(--bg-2)}
+.fnote{grid-column:1/-1;font-size:.78rem;color:var(--ink-3);padding:8px 2px 0;line-height:1.5}
 
-.progress{display:none;margin-top:13px}
-.progress.on{display:block}
-.pbar{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden}
-.pbar span{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}
-.ptext{font-family:var(--fm);font-size:.74rem;color:var(--dim);margin-top:7px;text-align:center}
+/* results */
+.results{display:none;margin-top:34px}
+.results.on{display:block}
+.results h2{text-align:center;font-size:clamp(1.7rem,4vw,2.3rem);font-weight:800;letter-spacing:-.03em;margin-bottom:22px}
+.rcard{border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:visible;background:var(--bg)}
+.rrow{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.rrow:last-child{border-bottom:none}
+.rname{flex:1;min-width:0;font-size:.9rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rstat{font-size:.85rem;font-weight:600;color:var(--ok);white-space:nowrap}
+.rsize{font-size:.82rem;color:var(--ink-3);white-space:nowrap}
+.rprog{width:110px;flex-shrink:0}
+.rbar{height:6px;border-radius:3px;background:var(--bg-3);overflow:hidden}
+.rbar span{display:block;height:100%;background:var(--ok);width:0;transition:width .25s}
+.rptxt{font-size:.76rem;color:var(--ok);font-weight:600;margin-bottom:4px;text-align:center}
+.done-pill{font-size:.78rem;font-weight:700;color:var(--ok);border:1px solid #BBF7D0;background:#F0FDF4;padding:5px 12px;border-radius:7px}
+.dl{position:relative;display:inline-flex;box-shadow:var(--sh);border-radius:9px;flex-shrink:0}
+.dl-main{background:var(--brand);color:#fff;border:none;font-weight:700;font-size:.88rem;padding:11px 19px;border-radius:9px 0 0 9px;cursor:pointer;text-decoration:none;display:flex;align-items:center}
+.dl-main:hover{background:var(--brand-dk)}
+.dl-caret{background:var(--brand);color:#fff;border:none;border-left:1px solid rgba(255,255,255,.28);padding:0 12px;border-radius:0 9px 9px 0;cursor:pointer;font-size:.72rem}
+.dl-caret:hover{background:var(--brand-dk)}
+.dl .menu{left:auto;right:0;min-width:210px}
+.rfoot{background:var(--bg-2);border-top:1px solid var(--line);padding:0}
+.convmore{background:var(--ink-2);color:#fff;border:none;font-weight:700;font-size:.9rem;padding:15px 26px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.convmore:hover{background:var(--ink)}
+.privacy{padding:13px 17px;font-size:.83rem;color:var(--ink-3)}
+.privacy b{color:var(--ok);font-weight:600}
 
-/* Results */
-.totals{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:15px 17px;margin-bottom:13px;background:linear-gradient(90deg,var(--accent-dim),transparent);border:1px solid rgba(0,229,160,.25);border-radius:11px}
-.tstat{font-family:var(--fm)}
-.tnum{font-size:1.45rem;font-weight:600;color:var(--accent);line-height:1}
-.tlbl{font-size:.72rem;color:var(--dim);margin-top:2px}
+/* qr modal */
+.qbox{background:var(--bg);border-radius:14px;box-shadow:var(--sh-lg);padding:26px;text-align:center;max-width:330px}
+.qbox h3{font-size:1.05rem;font-weight:700;margin-bottom:6px}
+.qbox p{font-size:.85rem;color:var(--ink-3);margin-bottom:16px}
+.qbox img{width:100%;border-radius:10px;border:1px solid var(--line)}
 
-.row{display:flex;align-items:center;gap:13px;padding:11px 13px;margin-bottom:8px;background:var(--bg);border:1px solid var(--line);border-radius:10px}
-.row-th{width:42px;height:42px;border-radius:7px;object-fit:cover;background:var(--surface-2);flex-shrink:0;cursor:pointer}
-.row-main{flex:1;min-width:0}
-.row-name{font-size:.85rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
-.row-meta{font-family:var(--fm);font-size:.72rem;color:var(--dim);display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-.row-meta .old{text-decoration:line-through;opacity:.55}
-.row-meta .save{color:var(--accent);font-weight:500}
-.lnk{background:none;border:none;color:var(--accent);font-family:var(--fm);font-size:.72rem;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
-.row-dl{font-family:var(--fm);font-size:.74rem;font-weight:500;padding:7px 12px;border-radius:7px;text-decoration:none;white-space:nowrap;background:var(--accent-dim);color:var(--accent);border:1px solid rgba(0,229,160,.28);flex-shrink:0}
-.row-dl:hover{background:rgba(0,229,160,.2)}
-
-/* Compare modal */
-.modal{position:fixed;inset:0;background:rgba(5,7,10,.92);backdrop-filter:blur(6px);z-index:100;display:none;align-items:center;justify-content:center;padding:18px}
-.modal.on{display:flex}
-.mbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);max-width:880px;width:100%;max-height:92vh;overflow:auto}
-.mhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 17px;border-bottom:1px solid var(--line)}
-.mtitle{font-size:.9rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mx{background:none;border:none;color:var(--dim);font-size:1.4rem;cursor:pointer;line-height:1;padding:0 4px}
-.mx:hover{color:var(--text)}
-.cmp{position:relative;width:100%;background:#0A0D11;overflow:hidden;user-select:none;touch-action:none;cursor:ew-resize;line-height:0}
-.cmp-base{display:block;width:100%;height:auto}
-.cmp-top{position:absolute;top:0;left:0;height:100%;overflow:hidden;width:50%}
-.cmp-top img{display:block;height:100%;width:auto;max-width:none;object-fit:cover;object-position:left top}
-.cmp-line{position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--accent);pointer-events:none;transform:translateX(-1px)}
-.cmp-line::after{content:'\2194';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:var(--accent);color:#04140E;border:3px solid var(--bg);display:grid;place-items:center;font-size:.9rem;line-height:1}
-.tag{position:absolute;top:9px;font-family:var(--fm);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:5px;background:rgba(5,7,10,.78);pointer-events:none;line-height:1.4}
-.tag.l{left:9px}
-.tag.r{right:9px;color:var(--accent)}
-.mfoot{display:flex;gap:20px;padding:12px 17px;border-top:1px solid var(--line);font-family:var(--fm);font-size:.77rem;flex-wrap:wrap;color:var(--dim)}
-.mfoot b{color:var(--accent);font-weight:500}
-
-.ad-slot{margin:28px 0;text-align:center;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ad-label{font-family:var(--fm);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#454E5C;margin-bottom:6px}
-
-.section{padding:40px 0;border-top:1px solid var(--line);margin-top:40px}
-h2{font-size:1.4rem;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
-.section>p{color:var(--dim);max-width:640px;margin-bottom:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin-top:20px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
-.card h3{font-size:.95rem;font-weight:600;margin-bottom:6px}
-.card p{font-size:.85rem;color:var(--dim)}
-.faq{border-top:1px solid var(--line);padding:15px 0}
-.faq summary{font-weight:600;font-size:.93rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+/* ads + content */
+.ad{margin:34px 0;text-align:center;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ad-l{font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-4);margin-bottom:7px;font-weight:600}
+.sec{padding:44px 0;border-top:1px solid var(--line);margin-top:44px}
+h2.sh{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.sec>p{color:var(--ink-2);max-width:640px;margin-bottom:14px}
+.steps3{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px;margin-top:22px}
+.st{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.st-n{width:27px;height:27px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.83rem;margin-bottom:11px}
+.st h3{font-size:.97rem;font-weight:700;margin-bottom:5px}
+.st p{font-size:.87rem;color:var(--ink-2)}
+.pairs{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+.pairs a{font-size:.85rem;font-weight:600;color:var(--ink-2);background:var(--bg-2);border:1px solid var(--line);padding:8px 14px;border-radius:8px;text-decoration:none}
+.pairs a:hover{border-color:var(--brand);color:var(--brand)}
+.faq{border-top:1px solid var(--line);padding:16px 0}
+.faq summary{font-weight:700;font-size:.94rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:'+';font-family:var(--fm);color:var(--accent);font-size:1.15rem}
+.faq summary::after{content:'+';color:var(--brand);font-size:1.2rem;font-weight:700}
 .faq[open] summary::after{content:'\2212'}
-.faq p{margin-top:10px;font-size:.88rem;color:var(--dim)}
+.faq p{margin-top:10px;font-size:.89rem;color:var(--ink-2)}
+footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;background:var(--bg-2)}
+.ft{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:.83rem;color:var(--ink-3)}
+.ft a{color:var(--ink-3);text-decoration:none}
+.ft a:hover{color:var(--brand)}
 
-footer{border-top:1px solid var(--line);padding:24px 0;margin-top:40px}
-.foot{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--dim)}
-.foot a{color:var(--dim);text-decoration:none}
-.foot a:hover{color:var(--accent)}
-
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
-@media (max-width:620px){
-  .hero{padding:32px 0 22px}
-  .choices{grid-template-columns:1fr}
-  .row{flex-wrap:wrap}
-  .totals{flex-direction:column;align-items:flex-start}
-  .head-note{display:none}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+@media (max-width:700px){
+  .hd-nav a{display:none}
+  .dz{padding:40px 16px}
+  .frow{flex-wrap:wrap}
+  .fctl{width:100%;justify-content:flex-end}
+  .panel-foot{flex-direction:column}
+  .convert{justify-content:center;width:100%}
+  .rrow{flex-wrap:wrap}
+  .fbody{flex-direction:column}
+  .fcats{width:100%;display:flex;gap:6px;border-right:none;border-bottom:1px solid var(--line);padding:8px 12px}
+  .fgrid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="wrap head-inner">
-    <a href="/" class="logo"><span class="logo-mark">&#9672;</span>ToolBench</a>
-    <span class="head-note">Runs offline &middot; nothing uploads</span>
+  <div class="wrap hd">
+    <a href="/" class="logo"><span class="logo-m">&#8644;</span>ToolBench</a>
+    <nav class="hd-nav">
+      <a href="#how">How it works</a>
+      <a href="#formats">Formats</a>
+      <span class="hd-badge">No upload</span>
+    </nav>
   </div>
 </header>
 
 <main class="wrap">
 
   <section class="hero">
-    <h1>Compress or convert <em>any image</em></h1>
-    <p class="sub">Four steps, no upload, no sign-up. Your files are processed inside this browser tab and never sent anywhere.</p>
+    <h1>Image Converter</h1>
+    <p>Convert images online, for free. Files are processed in your browser and never uploaded.</p>
   </section>
 
-  <!-- STEP 1 -->
-  <section class="step active" id="s1">
-    <div class="step-head">
-      <span class="step-num">1</span>
-      <span class="step-title">Add your images</span>
-      <span class="step-meta" id="s1meta"></span>
-    </div>
-    <div class="step-body">
-      <div class="dz" id="dz" role="button" tabindex="0" aria-label="Choose images">
-        <div class="dz-icon">&darr;</div>
-        <div class="dz-t">Drop images here</div>
-        <div class="dz-h">or click to browse &mdash; as many as you like</div>
-        <div class="dz-f">PNG &middot; JPG &middot; WEBP &middot; AVIF &middot; GIF &middot; BMP</div>
-        <input type="file" id="fi" accept="image/*,.heic,.heif" multiple hidden>
-      </div>
-      <div class="strip" id="strip"></div>
-      <div class="strip-actions" id="s1actions" style="display:none">
-        <button class="btn btn-sm" id="toStep2">Continue</button>
-        <button class="btn btn-ghost btn-sm" id="addMore">Add more</button>
-        <button class="btn btn-ghost btn-sm" id="clearAll">Clear all</button>
+  <div class="dz" id="dz">
+    <div class="choose" id="chooseWrap">
+      <button class="choose-main" id="chooseBtn"><span>&#128462;</span> Choose Files</button>
+      <button class="choose-caret" id="chooseCaret" aria-label="More sources">&#9660;</button>
+      <div class="menu" id="srcMenu">
+        <button data-src="device"><span class="ic">&#128193;</span> From Device</button>
+        <button data-src="dropbox" disabled><span class="ic">&#128230;</span> From Dropbox <span class="soon">SOON</span></button>
+        <button data-src="gdrive" disabled><span class="ic">&#9729;</span> From Google Drive <span class="soon">SOON</span></button>
+        <button data-src="onedrive" disabled><span class="ic">&#9729;</span> From OneDrive <span class="soon">SOON</span></button>
+        <button data-src="url"><span class="ic">&#128279;</span> From Url</button>
       </div>
     </div>
-  </section>
+    <div class="dz-note">or <b>drop files here</b> &mdash; or press <b>Ctrl&nbsp;+&nbsp;V</b> to paste</div>
+    <div class="dz-sub">No file size limit. No sign-up. <a href="#how">How it works</a></div>
+    <input type="file" id="fi" accept="image/*,.heic,.heif" multiple hidden>
+  </div>
 
-  <!-- STEP 2 -->
-  <section class="step locked" id="s2">
-    <div class="step-head">
-      <span class="step-num">2</span>
-      <span class="step-title">Choose what to do</span>
-      <span class="step-meta" id="s2meta"></span>
-    </div>
-    <div class="step-body">
-      <div class="choices">
-        <button class="choice" data-mode="compress">
-          <span class="choice-t">Compress</span>
-          <span class="choice-d">Keep the same format, make the file smaller.</span>
-        </button>
-        <button class="choice" data-mode="convert">
-          <span class="choice-t">Convert</span>
-          <span class="choice-d">Change to another format, e.g. JPG to WebP.</span>
-        </button>
-      </div>
-
-      <div class="opts" id="optCompress">
-        <div class="opt-row">
-          <div class="opt">
-            <div class="opt-label"><span>Quality</span><span class="opt-val" id="qv">80</span></div>
-            <input type="range" id="q" min="10" max="100" value="80" step="5">
-          </div>
-          <div class="opt">
-            <div class="opt-label"><span>Max width</span><span class="opt-val" id="wv">Original</span></div>
-            <input type="range" id="w" min="0" max="4000" value="0" step="200">
-          </div>
+  <!-- FILE PANEL -->
+  <div class="panel" id="panel">
+    <div class="panel-top">
+      <div class="addmore" id="addWrap">
+        <button class="addmore-main" id="addBtn"><span>&#128462;</span> Add More Files</button>
+        <button class="addmore-caret" id="addCaret" aria-label="More sources">&#9660;</button>
+        <div class="menu" id="srcMenu2">
+          <button data-src="device"><span class="ic">&#128193;</span> From Device</button>
+          <button data-src="dropbox" disabled><span class="ic">&#128230;</span> From Dropbox <span class="soon">SOON</span></button>
+          <button data-src="gdrive" disabled><span class="ic">&#9729;</span> From Google Drive <span class="soon">SOON</span></button>
+          <button data-src="onedrive" disabled><span class="ic">&#9729;</span> From OneDrive <span class="soon">SOON</span></button>
+          <button data-src="url"><span class="ic">&#128279;</span> From Url</button>
         </div>
       </div>
+    </div>
+    <div id="fileRows"></div>
+    <div class="panel-foot">
+      <div class="added">Added <b id="cnt">0</b> files</div>
+      <button class="convert" id="convertBtn">Convert <span>&rarr;</span></button>
+    </div>
+  </div>
 
-      <div class="opts" id="optConvert">
-        <div class="opt-row">
-          <div class="opt">
-            <div class="opt-label"><span>Convert to</span></div>
-            <div class="seg" id="fmt">
-              <button data-f="image/webp" class="on">WEBP</button>
-              <button data-f="image/avif" id="bAvif">AVIF</button>
-              <button data-f="image/jpeg">JPG</button>
-              <button data-f="image/png">PNG</button>
-            </div>
-          </div>
-          <div class="opt">
-            <div class="opt-label"><span>Quality</span><span class="opt-val" id="qv2">85</span></div>
-            <input type="range" id="q2" min="10" max="100" value="85" step="5">
-          </div>
-        </div>
-      </div>
-
-      <div class="strip-actions">
-        <button class="btn btn-sm" id="toStep3" disabled>Continue</button>
-        <button class="btn btn-ghost btn-sm" id="backTo1">Back</button>
+  <!-- RESULTS -->
+  <section class="results" id="results">
+    <h2>Conversion Results</h2>
+    <div class="rcard">
+      <div id="resRows"></div>
+      <div class="rfoot">
+        <button class="convmore" id="convMore">Convert More <span>&#8599;</span></button>
+        <div class="privacy">Files are processed <b>entirely in your browser</b> and are never uploaded, stored, or deleted from a server &mdash; because they never leave your device.</div>
       </div>
     </div>
   </section>
 
-  <!-- STEP 3 -->
-  <section class="step locked" id="s3">
-    <div class="step-head">
-      <span class="step-num">3</span>
-      <span class="step-title" id="s3title">Run it</span>
-      <span class="step-meta" id="s3meta"></span>
-    </div>
-    <div class="step-body">
-      <button class="btn btn-wide" id="run">Compress images</button>
-      <div class="progress" id="prog">
-        <div class="pbar"><span id="pfill"></span></div>
-        <div class="ptext" id="ptext">Working&hellip;</div>
-      </div>
-      <div class="strip-actions" style="margin-top:12px">
-        <button class="btn btn-ghost btn-sm" id="backTo2">Change settings</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- STEP 4 -->
-  <section class="step locked" id="s4">
-    <div class="step-head">
-      <span class="step-num">4</span>
-      <span class="step-title">Download</span>
-      <span class="step-meta" id="s4meta"></span>
-    </div>
-    <div class="step-body">
-      <div class="totals" id="totals">
-        <div style="display:flex;gap:26px;flex-wrap:wrap">
-          <div class="tstat"><div class="tnum" id="tSaved">&mdash;</div><div class="tlbl">total saved</div></div>
-          <div class="tstat"><div class="tnum" id="tPct">&mdash;</div><div class="tlbl">smaller</div></div>
-          <div class="tstat"><div class="tnum" id="tCount">&mdash;</div><div class="tlbl">files</div></div>
-        </div>
-        <div style="display:flex;gap:9px;flex-wrap:wrap">
-          <button class="btn btn-sm" id="dlZip">Download all (ZIP)</button>
-          <button class="btn btn-ghost btn-sm" id="startOver">Start over</button>
-        </div>
-      </div>
-      <div id="rows"></div>
-    </div>
-  </section>
-
-  <div class="ad-slot">
-    <div class="ad-label">Advertisement</div>
+  <div class="ad">
+    <div class="ad-l">Advertisement</div>
     <div id="ad-1"><!-- ad code --></div>
   </div>
 
-  <section class="section">
-    <h2>Why this one is different</h2>
-    <p>Most online compressors upload your images to a server, cap you at 20 files, and limit each to 5&nbsp;MB. This one has no server at all.</p>
-    <div class="grid">
-      <div class="card"><h3>Nothing is uploaded</h3><p>Processing happens in your browser. Turn off your connection after the page loads and it still works.</p></div>
-      <div class="card"><h3>No batch limit</h3><p>Drop a whole folder. There's no file cap and no size cap, because there's no server to pay for.</p></div>
-      <div class="card"><h3>See the trade-off</h3><p>Drag the compare slider on any result to check quality against the original before you download.</p></div>
+  <section class="sec" id="how">
+    <h2 class="sh">How to convert images</h2>
+    <p>Three steps, no account, no waiting in a queue.</p>
+    <div class="steps3">
+      <div class="st"><div class="st-n">1</div><h3>Add your files</h3><p>Click "Choose Files", drop them in, paste with Ctrl+V, or load one from a URL.</p></div>
+      <div class="st"><div class="st-n">2</div><h3>Pick the output format</h3><p>Choose JPG, PNG, WebP or AVIF per file, and adjust quality if you want.</p></div>
+      <div class="st"><div class="st-n">3</div><h3>Convert and download</h3><p>Hit Convert, then download each file or grab everything as a ZIP.</p></div>
     </div>
   </section>
 
-  <div class="ad-slot">
-    <div class="ad-label">Advertisement</div>
+  <section class="sec" id="formats">
+    <h2 class="sh">Popular conversions</h2>
+    <p>Every conversion runs locally in your browser, so there is no queue, no size cap and nothing to upload.</p>
+    <div class="pairs">
+      <a href="#">PNG to JPG</a><a href="#">JPG to PNG</a><a href="#">PNG to WebP</a>
+      <a href="#">JPG to WebP</a><a href="#">WebP to PNG</a><a href="#">WebP to JPG</a>
+      <a href="#">HEIC to JPG</a><a href="#">PNG to AVIF</a><a href="#">JPG to AVIF</a>
+      <a href="#">AVIF to JPG</a><a href="#">GIF to PNG</a><a href="#">BMP to JPG</a>
+    </div>
+  </section>
+
+  <div class="ad">
+    <div class="ad-l">Advertisement</div>
     <div id="ad-2"><!-- ad code --></div>
   </div>
 
-  <section class="section">
-    <h2>Questions</h2>
-    <details class="faq"><summary>Compress or convert &mdash; which do I want?</summary>
-      <p>Compress keeps the file type you already have and just shrinks it. Convert changes the file type, which is usually the bigger win: the same photo as WebP is typically 25&ndash;35% smaller than JPG at matching quality, and AVIF smaller still.</p></details>
-    <details class="faq"><summary>Does compressing hurt quality?</summary>
-      <p>At quality 80 the difference is invisible on most photos while the file drops 60&ndash;80%. Use the compare slider on any result to judge it yourself. Photos handle compression well; flat graphics and screenshots do better as PNG or at higher quality.</p></details>
-    <details class="faq"><summary>Are my images sent to a server?</summary>
-      <p>No. Everything runs inside your browser tab. Nothing is transmitted, stored, or logged, and there is no account to create.</p></details>
-    <details class="faq"><summary>Why did my PNG get bigger?</summary>
-      <p>Re-encoding a PNG discards the original file's optimisation, so an already-optimised PNG can grow. Convert it to WebP or AVIF instead. The tool flags this when it happens.</p></details>
-    <details class="faq"><summary>Is there a limit on file size or count?</summary>
-      <p>No imposed limit. Very large images can be slow on phones because the work happens on your own device.</p></details>
+  <section class="sec">
+    <h2 class="sh">Frequently asked questions</h2>
+    <details class="faq"><summary>Are my images uploaded to a server?</summary>
+      <p>No. Conversion happens inside your browser using the Canvas API. Nothing is transmitted, stored or logged. You can disconnect from the internet after the page loads and it will still work.</p></details>
+    <details class="faq"><summary>Is there a file size or file count limit?</summary>
+      <p>No. Most converters cap you at 1&nbsp;GB or 20 files because they pay for server processing. There is no server here, so there is no cap. Very large images may simply take a moment on slower devices.</p></details>
+    <details class="faq"><summary>Which output format should I choose?</summary>
+      <p>WebP is the best default for the web &mdash; typically 25&ndash;35% smaller than JPG at matching quality, with support in every modern browser. AVIF is smaller still. JPG is the most universally compatible. PNG is for transparency and flat graphics.</p></details>
+    <details class="faq"><summary>Why are some formats greyed out?</summary>
+      <p>Browsers can decode many formats but can only <em>write</em> JPG, PNG, WebP and AVIF. Formats like TIFF, PSD or SVG would need a server to encode, and adding a server would mean uploading your files. We chose privacy instead.</p></details>
+    <details class="faq"><summary>Is JPG the same as JPEG?</summary>
+      <p>Yes, identical. The two names exist only because older systems limited file extensions to three characters.</p></details>
   </section>
 
 </main>
 
-<div class="modal" id="modal">
-  <div class="mbox">
-    <div class="mhead">
-      <span class="mtitle" id="mTitle">Compare</span>
-      <button class="mx" id="mClose" aria-label="Close">&times;</button>
-    </div>
-    <div class="cmp" id="cmp">
-      <img class="cmp-base" id="cmpNew" alt="Compressed result">
-      <div class="cmp-top" id="cmpTop"><img id="cmpOrig" alt="Original"></div>
-      <div class="cmp-line" id="cmpLine"></div>
-      <span class="tag l">Original</span>
-      <span class="tag r">Result</span>
-    </div>
-    <div class="mfoot">
-      <span>Original <b id="mOrig"></b></span>
-      <span>Result <b id="mNew"></b></span>
-      <span>Saved <b id="mSave"></b></span>
+<!-- FORMAT PICKER -->
+<div class="ovl" id="fmtOvl">
+  <div class="fmodal">
+    <div class="fsearch"><input type="text" id="fmtSearch" placeholder="Search Format" autocomplete="off"></div>
+    <div class="fbody">
+      <div class="fcats" id="fcats">
+        <button class="fcat on" data-cat="Image">Image &rsaquo;</button>
+        <button class="fcat" data-cat="Document">Document</button>
+        <button class="fcat" data-cat="Report">Report</button>
+      </div>
+      <div class="fgrid" id="fgrid"></div>
     </div>
   </div>
 </div>
 
+<!-- QR -->
+<div class="ovl" id="qrOvl">
+  <div class="qbox">
+    <h3>Scan to download</h3>
+    <p>Open this file on your phone. The code works while this tab stays open.</p>
+    <img id="qrImg" alt="QR code">
+  </div>
+</div>
+
 <footer>
-  <div class="wrap foot">
-    <span>&copy; 2026 ToolBench &mdash; free browser-based tools</span>
-    <span><a href="/privacy.html">Privacy</a> &middot; <a href="/contact.html">Contact</a></span>
+  <div class="wrap ft">
+    <span>&copy; 2026 ToolBench &mdash; free browser-based file tools</span>
+    <span><a href="/privacy.html">Privacy</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/contact.html">Contact</a></span>
   </div>
 </footer>
 
 <script>
 (function(){
-  var $=function(id){return document.getElementById(id)};
-  var items=[], mode=null, seq=0;
+var $=function(i){return document.getElementById(i)};
+var items=[], seq=0, activeFileId=null;
 
-  var s1=$('s1'), s2=$('s2'), s3=$('s3'), s4=$('s4');
-  var dz=$('dz'), fi=$('fi'), strip=$('strip');
+var FORMATS={
+  Image:[
+    {k:'BMP',m:null},{k:'EPS',m:null},{k:'GIF',m:null},
+    {k:'ICO',m:null},{k:'JPEG',m:'image/jpeg'},{k:'JPG',m:'image/jpeg'},
+    {k:'PNG',m:'image/png'},{k:'PSD',m:null},{k:'SVG',m:null},
+    {k:'TGA',m:null},{k:'TIFF',m:null},{k:'WebP',m:'image/webp'},
+    {k:'AVIF',m:'image/avif'}
+  ],
+  Document:[{k:'PDF',m:null},{k:'DOC',m:null},{k:'DOCX',m:null},{k:'TXT',m:null}],
+  Report:[{k:'CSV',m:null},{k:'XLS',m:null},{k:'JSON',m:null}]
+};
 
-  function bytes(b){
-    if(b<1024) return b+' B';
-    if(b<1048576) return (b/1024).toFixed(1)+' KB';
-    return (b/1048576).toFixed(2)+' MB';
-  }
-  function extOf(m){
-    return m==='image/webp'?'webp':m==='image/avif'?'avif':m==='image/png'?'png':'jpg';
-  }
-  function stem(n){ return n.replace(/\.[^.]+$/,''); }
-  function typeOf(f){
-    if(f.type && f.type.indexOf('image/')===0) return f.type;
-    if(/\.png$/i.test(f.name)) return 'image/png';
-    if(/\.webp$/i.test(f.name)) return 'image/webp';
-    if(/\.avif$/i.test(f.name)) return 'image/avif';
-    return 'image/jpeg';
-  }
+var AVIF_OK=(function(){
+  var c=document.createElement('canvas');c.width=c.height=1;
+  try{return c.toDataURL('image/avif').indexOf('data:image/avif')===0}catch(e){return false}
+})();
 
-  /* AVIF capability probe */
-  (function(){
-    var c=document.createElement('canvas'); c.width=c.height=1;
-    var ok=false;
-    try{ ok=c.toDataURL('image/avif').indexOf('data:image/avif')===0; }catch(e){}
-    if(!ok){ var b=$('bAvif'); b.disabled=true; b.title='This browser cannot encode AVIF'; }
-  })();
+function bytes(b){
+  if(b<1024)return b+' B';
+  if(b<1048576)return (b/1024).toFixed(1)+' KB';
+  return (b/1048576).toFixed(2)+' MB';
+}
+function stem(n){return n.replace(/\.[^.]+$/,'')}
+function extOf(m){return m==='image/webp'?'webp':m==='image/avif'?'avif':m==='image/png'?'png':'jpg'}
+function keyOf(m){return m==='image/webp'?'WebP':m==='image/avif'?'AVIF':m==='image/png'?'PNG':'JPG'}
 
-  /* ── step control ── */
-  function goStep(n){
-    [s1,s2,s3,s4].forEach(function(el,i){
-      var idx=i+1;
-      el.classList.remove('active','locked','collapsed');
-      if(idx<n){ el.classList.add('done','collapsed'); }
-      else if(idx===n){ el.classList.add('active'); el.classList.remove('done'); }
-      else { el.classList.add('locked'); el.classList.remove('done'); }
-    });
-    var top=({1:s1,2:s2,3:s3,4:s4})[n];
-    if(top && n>1) top.scrollIntoView({behavior:'smooth',block:'start'});
-  }
-
-  /* ── STEP 1: files ── */
-  dz.addEventListener('click',function(){fi.click()});
-  dz.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();fi.click()} });
-  ['dragenter','dragover'].forEach(function(ev){ dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('drag')}) });
-  ['dragleave','drop'].forEach(function(ev){ dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove('drag')}) });
-  dz.addEventListener('drop',function(e){ addFiles(e.dataTransfer.files) });
-  fi.addEventListener('change',function(e){ addFiles(e.target.files); fi.value=''; });
-  $('addMore').addEventListener('click',function(){ fi.click() });
-
-  function addFiles(fl){
-    var arr=Array.prototype.slice.call(fl).filter(function(f){
-      return (f.type&&f.type.indexOf('image/')===0) || /\.(heic|heif)$/i.test(f.name);
-    });
-    if(!arr.length) return;
-    arr.forEach(function(f){
-      items.push({id:++seq,file:f,srcType:typeOf(f),origUrl:URL.createObjectURL(f),blob:null,url:null,outType:null});
-    });
-    paintStrip();
-  }
-
-  function paintStrip(){
-    strip.innerHTML='';
-    var show=items.slice(0,14);
-    show.forEach(function(it){
-      var c=document.createElement('div');
-      c.className='chip';
-      c.innerHTML='<img alt=""><button title="Remove" aria-label="Remove">&times;</button>';
-      c.querySelector('img').src=it.origUrl;
-      c.querySelector('button').addEventListener('click',function(){ dropItem(it) });
-      strip.appendChild(c);
-    });
-    if(items.length>show.length){
-      var m=document.createElement('div');
-      m.className='chip more-chip';
-      m.textContent='+'+(items.length-show.length);
-      strip.appendChild(m);
-    }
-    var total=items.reduce(function(s,i){return s+i.file.size},0);
-    $('s1meta').textContent=items.length? items.length+' file'+(items.length>1?'s':'')+' \u00B7 '+bytes(total) : '';
-    $('s1actions').style.display=items.length?'flex':'none';
-  }
-
-  function dropItem(it){
-    URL.revokeObjectURL(it.origUrl);
-    if(it.url) URL.revokeObjectURL(it.url);
-    items=items.filter(function(x){return x!==it});
-    paintStrip();
-    if(!items.length) goStep(1);
-  }
-
-  $('clearAll').addEventListener('click',resetAll);
-  function resetAll(){
-    items.forEach(function(it){
-      URL.revokeObjectURL(it.origUrl);
-      if(it.url) URL.revokeObjectURL(it.url);
-    });
-    items=[]; mode=null;
-    strip.innerHTML=''; $('rows').innerHTML='';
-    $('s1meta').textContent=''; $('s2meta').textContent=''; $('s3meta').textContent=''; $('s4meta').textContent='';
-    $('s1actions').style.display='none';
-    document.querySelectorAll('.choice').forEach(function(b){b.classList.remove('on')});
-    $('optCompress').classList.remove('on'); $('optConvert').classList.remove('on');
-    $('toStep3').disabled=true;
-    goStep(1);
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-  $('startOver').addEventListener('click',resetAll);
-
-  $('toStep2').addEventListener('click',function(){ if(items.length) goStep(2) });
-  $('backTo1').addEventListener('click',function(){ goStep(1) });
-  $('backTo2').addEventListener('click',function(){ goStep(2) });
-
-  /* ── STEP 2: mode + options ── */
-  document.querySelectorAll('.choice').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      document.querySelectorAll('.choice').forEach(function(b){b.classList.remove('on')});
-      btn.classList.add('on');
-      mode=btn.dataset.mode;
-      $('optCompress').classList.toggle('on',mode==='compress');
-      $('optConvert').classList.toggle('on',mode==='convert');
-      $('toStep3').disabled=false;
-      $('s2meta').textContent = mode==='compress' ? 'Compress' : 'Convert';
-    });
+/* ── dropdown menus ── */
+function bindMenu(caretId,menuId){
+  var caret=$(caretId), menu=$(menuId);
+  caret.addEventListener('click',function(e){
+    e.stopPropagation();
+    document.querySelectorAll('.menu.on').forEach(function(m){if(m!==menu)m.classList.remove('on')});
+    menu.classList.toggle('on');
   });
-
-  $('q').addEventListener('input',function(){ $('qv').textContent=this.value });
-  $('q2').addEventListener('input',function(){ $('qv2').textContent=this.value });
-  $('w').addEventListener('input',function(){ $('wv').textContent=this.value==='0'?'Original':this.value+'px' });
-  $('fmt').addEventListener('click',function(e){
+  menu.addEventListener('click',function(e){
     var b=e.target.closest('button'); if(!b||b.disabled) return;
-    $('fmt').querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
-    b.classList.add('on');
+    menu.classList.remove('on');
+    if(b.dataset.src==='device') $('fi').click();
+    else if(b.dataset.src==='url') fromUrl();
   });
+}
+bindMenu('chooseCaret','srcMenu');
+bindMenu('addCaret','srcMenu2');
+document.addEventListener('click',function(){
+  document.querySelectorAll('.menu.on').forEach(function(m){m.classList.remove('on')});
+});
 
-  $('toStep3').addEventListener('click',function(){
-    if(!mode) return;
-    var lbl = mode==='compress' ? 'Compress' : 'Convert';
-    $('s3title').textContent = lbl+' '+items.length+' image'+(items.length>1?'s':'');
-    $('run').textContent = lbl+' image'+(items.length>1?'s':'');
-    goStep(3);
+$('chooseBtn').addEventListener('click',function(){$('fi').click()});
+$('addBtn').addEventListener('click',function(){$('fi').click()});
+$('fi').addEventListener('change',function(e){add(e.target.files);this.value=''});
+
+function fromUrl(){
+  var u=prompt('Paste a direct image URL:');
+  if(!u) return;
+  fetch(u,{mode:'cors'}).then(function(r){
+    if(!r.ok) throw 0; return r.blob();
+  }).then(function(b){
+    if(b.type.indexOf('image/')!==0) throw 0;
+    var name=(u.split('/').pop()||'image').split('?')[0];
+    add([new File([b],name,{type:b.type})]);
+  }).catch(function(){
+    alert('Could not load that image. The site may block cross-origin requests \u2014 try downloading it first.');
   });
+}
 
-  /* ── STEP 3: run ── */
-  $('run').addEventListener('click',function(){
-    var btn=this;
-    btn.disabled=true;
-    $('prog').classList.add('on');
-    var targetFmt = mode==='convert'
-      ? $('fmt').querySelector('button.on').dataset.f
-      : null;
-    var quality = mode==='convert'
-      ? parseInt($('q2').value,10)/100
-      : parseInt($('q').value,10)/100;
-    var maxW = mode==='compress' ? parseInt($('w').value,10) : 0;
+/* drag + paste */
+var dz=$('dz');
+['dragenter','dragover'].forEach(function(ev){
+  dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('drag')});
+});
+['dragleave','drop'].forEach(function(ev){
+  dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove('drag')});
+});
+dz.addEventListener('drop',function(e){add(e.dataTransfer.files)});
+document.addEventListener('paste',function(e){
+  if(!e.clipboardData) return;
+  var f=[];
+  Array.prototype.forEach.call(e.clipboardData.files,function(x){f.push(x)});
+  if(f.length) add(f);
+});
 
-    var done=0;
-    function tick(){
-      done++;
-      var pct=Math.round(done/items.length*100);
-      $('pfill').style.width=pct+'%';
-      $('ptext').textContent=done+' of '+items.length+' processed';
-      if(done===items.length){
-        setTimeout(function(){
-          btn.disabled=false;
-          $('prog').classList.remove('on');
-          $('pfill').style.width='0';
-          $('s3meta').textContent='Done';
-          renderResults();
-          goStep(4);
-        },220);
-      }
+/* ── add files ── */
+function add(fl){
+  var arr=Array.prototype.slice.call(fl).filter(function(f){
+    return (f.type&&f.type.indexOf('image/')===0)||/\.(heic|heif)$/i.test(f.name);
+  });
+  if(!arr.length) return;
+  arr.forEach(function(f){
+    items.push({
+      id:++seq,file:f,url:URL.createObjectURL(f),
+      out:'image/jpeg',quality:85,maxw:0,
+      blob:null,outUrl:null,err:null
+    });
+  });
+  paint();
+  $('panel').classList.add('on');
+  $('results').classList.remove('on');
+}
+
+function paint(){
+  var box=$('fileRows'); box.innerHTML='';
+  items.forEach(function(it){
+    var row=document.createElement('div');
+    row.className='frow';
+    row.innerHTML=
+      '<img class="fthumb" alt="">'+
+      '<div class="finfo"><div class="fname"></div><div class="fsize"></div></div>'+
+      '<div class="fctl">'+
+        '<span class="olabel">Output:</span>'+
+        '<button class="opick"><span class="ok"></span><span style="font-size:.65rem">&#9660;</span></button>'+
+        '<button class="iconbtn gear" title="Settings">&#9881;</button>'+
+        '<button class="iconbtn x" title="Remove">&#10005;</button>'+
+      '</div>';
+    row.querySelector('.fthumb').src=it.url;
+    row.querySelector('.fname').textContent=it.file.name;
+    row.querySelector('.fsize').textContent=bytes(it.file.size);
+    row.querySelector('.ok').textContent=keyOf(it.out);
+    row.querySelector('.opick').addEventListener('click',function(e){e.stopPropagation();openFmt(it.id)});
+    row.querySelector('.gear').addEventListener('click',function(){toggleSet(it.id)});
+    row.querySelector('.x').addEventListener('click',function(){remove(it)});
+    box.appendChild(row);
+
+    var st=document.createElement('div');
+    st.className='fset'; st.id='set'+it.id;
+    st.innerHTML=
+      '<div class="fset-in">'+
+        '<div class="fld">'+
+          '<div class="fld-l"><span>Quality</span><b class="qn">'+it.quality+'</b></div>'+
+          '<input type="range" class="qr" min="10" max="100" step="5" value="'+it.quality+'">'+
+          '<div class="qhint"><span>Smallest file</span><span>Best quality</span></div>'+
+        '</div>'+
+        '<div class="fld">'+
+          '<div class="fld-l"><span>Max width (optional)</span></div>'+
+          '<input type="number" class="num mw" placeholder="Original" min="0" value="'+(it.maxw||'')+'">'+
+        '</div>'+
+      '</div>';
+    var q=st.querySelector('.qr');
+    q.addEventListener('input',function(){ it.quality=parseInt(this.value,10); st.querySelector('.qn').textContent=this.value; });
+    st.querySelector('.mw').addEventListener('input',function(){ it.maxw=parseInt(this.value,10)||0; });
+    box.appendChild(st);
+  });
+  $('cnt').textContent=items.length;
+  if(!items.length){ $('panel').classList.remove('on'); }
+}
+
+function toggleSet(id){ var el=$('set'+id); if(el) el.classList.toggle('on'); }
+function remove(it){
+  URL.revokeObjectURL(it.url);
+  if(it.outUrl) URL.revokeObjectURL(it.outUrl);
+  items=items.filter(function(x){return x!==it});
+  paint();
+}
+
+/* ── format picker ── */
+function openFmt(id){
+  activeFileId=id;
+  $('fmtSearch').value='';
+  drawFmt('Image','');
+  $('fmtOvl').classList.add('on');
+  setTimeout(function(){$('fmtSearch').focus()},60);
+}
+$('fcats').addEventListener('click',function(e){
+  var b=e.target.closest('.fcat'); if(!b) return;
+  $('fcats').querySelectorAll('.fcat').forEach(function(x){x.classList.remove('on')});
+  b.classList.add('on');
+  drawFmt(b.dataset.cat,$('fmtSearch').value);
+});
+$('fmtSearch').addEventListener('input',function(){
+  var cat=$('fcats').querySelector('.fcat.on').dataset.cat;
+  drawFmt(cat,this.value);
+});
+function drawFmt(cat,q){
+  var grid=$('fgrid'); grid.innerHTML='';
+  var it=items.filter(function(x){return x.id===activeFileId})[0];
+  var list=FORMATS[cat].filter(function(f){
+    return !q || f.k.toLowerCase().indexOf(q.toLowerCase())>-1;
+  });
+  list.forEach(function(f){
+    var b=document.createElement('button');
+    b.className='fopt';
+    b.textContent=f.k;
+    var usable=f.m && (f.m!=='image/avif'||AVIF_OK);
+    if(!usable){
+      b.disabled=true;
+      b.title=f.m==='image/avif' ? 'This browser cannot encode AVIF' : 'Cannot be written by a browser \u2014 needs a server';
+    } else {
+      if(it && it.out===f.m && keyOf(f.m)===f.k) b.classList.add('on');
+      b.addEventListener('click',function(){
+        if(it){ it.out=f.m; }
+        $('fmtOvl').classList.remove('on');
+        paint();
+      });
     }
-    items.forEach(function(it){ process(it,targetFmt,quality,maxW,tick) });
+    grid.appendChild(b);
   });
+  var note=document.createElement('div');
+  note.className='fnote';
+  note.textContent = cat==='Image'
+    ? 'Greyed-out formats can be read but not written by a browser. Enabling them would mean uploading your files to a server.'
+    : 'Document and report output needs server-side processing, which would mean uploading your files. Image formats only for now.';
+  grid.appendChild(note);
+}
+$('fmtOvl').addEventListener('click',function(e){ if(e.target===$('fmtOvl')) this.classList.remove('on') });
 
-  function process(item,targetFmt,quality,maxW,done){
-    var img=new Image();
-    img.onload=function(){
-      var w=img.naturalWidth, h=img.naturalHeight;
-      if(maxW>0 && w>maxW){ h=Math.round(h*(maxW/w)); w=maxW; }
-      var c=document.createElement('canvas');
-      c.width=w; c.height=h;
-      var ctx=c.getContext('2d');
-      var out = targetFmt || item.srcType;
-      if(out==='image/jpeg'){ ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,w,h); }
-      ctx.drawImage(img,0,0,w,h);
-      c.toBlob(function(blob){
-        if(blob){
-          if(item.url) URL.revokeObjectURL(item.url);
-          item.blob=blob; item.url=URL.createObjectURL(blob);
-          item.outType=out; item.outW=w; item.outH=h;
-        } else { item.error='Could not encode'; }
-        done();
-      }, out, out==='image/png'?undefined:quality);
-    };
-    img.onerror=function(){
-      item.error = /\.(heic|heif)$/i.test(item.file.name)
-        ? 'HEIC not supported by this browser'
-        : 'Could not read this file';
-      done();
-    };
-    img.src=item.origUrl;
-  }
-
-  /* ── STEP 4: results ── */
-  function renderResults(){
-    var box=$('rows'); box.innerHTML='';
-    items.forEach(function(it){
-      var row=document.createElement('div');
-      row.className='row';
-      row.innerHTML='<img class="row-th" alt="">'+
-        '<div class="row-main"><div class="row-name"></div><div class="row-meta"></div></div>';
-      row.querySelector('.row-th').src=it.origUrl;
-      row.querySelector('.row-name').textContent=it.file.name;
-      var meta=row.querySelector('.row-meta');
-
-      if(it.error){
-        meta.innerHTML='<span style="color:var(--warn)">'+it.error+'</span>';
-      } else {
-        var o=it.file.size, n=it.blob.size, pct=Math.round((1-n/o)*100), grew=pct<=0;
-        meta.innerHTML='<span class="old">'+bytes(o)+'</span><span>\u2192 '+bytes(n)+'</span>'+
-          (grew?'<span style="color:var(--warn)">+'+Math.abs(pct)+'% \u2014 try WebP</span>'
-               :'<span class="save">\u2212'+pct+'%</span>')+
-          '<span>'+it.outW+'\u00D7'+it.outH+'</span>';
-        var cb=document.createElement('button');
-        cb.className='lnk'; cb.textContent='compare';
-        cb.addEventListener('click',function(){ openCompare(it) });
-        meta.appendChild(cb);
-
-        var a=document.createElement('a');
-        a.className='row-dl'; a.textContent='Download';
-        a.href=it.url; a.download=stem(it.file.name)+'.'+extOf(it.outType);
-        row.appendChild(a);
-        row.querySelector('.row-th').addEventListener('click',function(){ openCompare(it) });
-      }
-      box.appendChild(row);
-    });
-
-    var ok=items.filter(function(i){return i.blob});
-    var o=ok.reduce(function(s,i){return s+i.file.size},0);
-    var n=ok.reduce(function(s,i){return s+i.blob.size},0);
-    $('tSaved').textContent=bytes(Math.max(0,o-n));
-    $('tPct').textContent=(o?Math.max(0,Math.round((1-n/o)*100)):0)+'%';
-    $('tCount').textContent=ok.length;
-    $('s4meta').textContent=ok.length+' ready';
-  }
-
-  $('dlZip').addEventListener('click',function(){
-    var ok=items.filter(function(i){return i.blob});
-    if(!ok.length) return;
-    var b=this; b.disabled=true; b.textContent='Zipping\u2026';
-    var zip=new JSZip(), used={};
-    ok.forEach(function(it){
-      var base=stem(it.file.name), ext=extOf(it.outType), name=base+'.'+ext;
-      if(used[name]){ used[name]++; name=base+'-'+used[name]+'.'+ext; } else used[name]=1;
-      zip.file(name,it.blob);
-    });
-    zip.generateAsync({type:'blob'}).then(function(out){
-      var url=URL.createObjectURL(out);
-      var a=document.createElement('a');
-      a.href=url; a.download='images.zip';
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){URL.revokeObjectURL(url)},2000);
-      b.disabled=false; b.textContent='Download all (ZIP)';
-    }).catch(function(){
-      b.textContent='ZIP failed';
-      setTimeout(function(){b.disabled=false;b.textContent='Download all (ZIP)'},2000);
+/* ── convert ── */
+$('convertBtn').addEventListener('click',function(){
+  if(!items.length) return;
+  this.disabled=true;
+  $('results').classList.add('on');
+  drawResults(true);
+  $('results').scrollIntoView({behavior:'smooth',block:'start'});
+  var done=0;
+  items.forEach(function(it){
+    convertOne(it,function(){
+      done++;
+      drawResults(done<items.length);
+      if(done===items.length){ $('convertBtn').disabled=false; }
     });
   });
+});
 
-  /* ── compare slider ── */
-  var modal=$('modal'), cmp=$('cmp'), cmpTop=$('cmpTop'),
-      cmpLine=$('cmpLine'), cmpOrig=$('cmpOrig'), cmpNew=$('cmpNew'), split=50;
+function convertOne(it,cb){
+  var img=new Image();
+  img.onload=function(){
+    var w=img.naturalWidth,h=img.naturalHeight;
+    if(it.maxw>0&&w>it.maxw){h=Math.round(h*(it.maxw/w));w=it.maxw}
+    var c=document.createElement('canvas');
+    c.width=w;c.height=h;
+    var ctx=c.getContext('2d');
+    if(it.out==='image/jpeg'){ctx.fillStyle='#FFF';ctx.fillRect(0,0,w,h)}
+    ctx.drawImage(img,0,0,w,h);
+    c.toBlob(function(b){
+      if(b){
+        if(it.outUrl) URL.revokeObjectURL(it.outUrl);
+        it.blob=b; it.outUrl=URL.createObjectURL(b); it.outW=w; it.outH=h;
+      } else it.err='Could not encode';
+      cb();
+    },it.out,it.out==='image/png'?undefined:it.quality/100);
+  };
+  img.onerror=function(){
+    it.err=/\.(heic|heif)$/i.test(it.file.name)?'HEIC not supported by this browser':'Could not read file';
+    cb();
+  };
+  img.src=it.url;
+}
 
-  function openCompare(it){
-    if(!it.blob) return;
-    $('mTitle').textContent=it.file.name;
-    $('mOrig').textContent=bytes(it.file.size);
-    $('mNew').textContent=bytes(it.blob.size);
-    var pct=Math.round((1-it.blob.size/it.file.size)*100);
-    $('mSave').textContent=(pct>0?pct:0)+'%';
-    cmpNew.src=it.url;
-    cmpOrig.src=it.origUrl;
-    modal.classList.add('on');
-    cmpNew.onload=function(){ fit(); setSplit(50); };
-    if(cmpNew.complete){ fit(); setSplit(50); }
-  }
-  function fit(){
-    var wpx=cmp.clientWidth;
-    var hpx=cmpNew.clientHeight || cmpNew.naturalHeight;
-    cmpOrig.style.width=wpx+'px';
-    cmpOrig.style.height=hpx+'px';
-    cmpTop.style.height=hpx+'px';
-  }
-  function setSplit(p){
-    split=Math.max(0,Math.min(100,p));
-    cmpTop.style.width=split+'%';
-    cmpLine.style.left=split+'%';
-  }
-  function fromX(x){
-    var r=cmp.getBoundingClientRect();
-    setSplit(((x-r.left)/r.width)*100);
-  }
-  var drag=false;
-  cmp.addEventListener('pointerdown',function(e){
-    drag=true; try{cmp.setPointerCapture(e.pointerId)}catch(err){} fromX(e.clientX);
+function drawResults(working){
+  var box=$('resRows'); box.innerHTML='';
+  items.forEach(function(it){
+    var row=document.createElement('div');
+    row.className='rrow';
+    var name=document.createElement('div');
+    name.className='rname'; name.textContent=it.file.name;
+    row.appendChild(name);
+
+    if(it.err){
+      var e=document.createElement('span');
+      e.className='rstat'; e.style.color='var(--err)'; e.textContent=it.err;
+      row.appendChild(e);
+    } else if(!it.blob){
+      var p=document.createElement('div');
+      p.className='rprog';
+      p.innerHTML='<div class="rptxt">Converting</div><div class="rbar"><span style="width:65%"></span></div>';
+      row.appendChild(p);
+    } else {
+      var pct=Math.round((1-it.blob.size/it.file.size)*100);
+      var s=document.createElement('span');
+      s.className='rsize';
+      s.textContent=bytes(it.file.size)+' \u2192 '+bytes(it.blob.size)+(pct>0?' ('+pct+'% smaller)':'');
+      row.appendChild(s);
+      var pill=document.createElement('span');
+      pill.className='done-pill'; pill.textContent='Done';
+      row.appendChild(pill);
+      row.appendChild(dlWidget(it));
+    }
+    box.appendChild(row);
   });
-  cmp.addEventListener('pointermove',function(e){ if(drag) fromX(e.clientX) });
-  ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
-    cmp.addEventListener(ev,function(){ drag=false });
-  });
-  window.addEventListener('resize',function(){ if(modal.classList.contains('on')){ fit(); setSplit(split); } });
 
-  function closeModal(){ modal.classList.remove('on') }
-  $('mClose').addEventListener('click',closeModal);
-  modal.addEventListener('click',function(e){ if(e.target===modal) closeModal() });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal() });
+  var ok=items.filter(function(i){return i.blob});
+  if(ok.length>1 && !working){
+    var z=document.createElement('div');
+    z.className='rrow';
+    z.innerHTML='<div class="rname">All files</div><span class="rsize">'+ok.length+' converted</span>';
+    var b=document.createElement('button');
+    b.className='dl-main'; b.style.borderRadius='9px'; b.textContent='Download ZIP';
+    b.addEventListener('click',function(){ zipAll(b) });
+    z.appendChild(b);
+    box.appendChild(z);
+  }
+}
+
+function dlWidget(it){
+  var wrap=document.createElement('div');
+  wrap.className='dl';
+  var fname=stem(it.file.name)+'.'+extOf(it.out);
+  var a=document.createElement('a');
+  a.className='dl-main'; a.textContent='Download';
+  a.href=it.outUrl; a.download=fname;
+  var caret=document.createElement('button');
+  caret.className='dl-caret'; caret.innerHTML='&#9660;';
+  var menu=document.createElement('div');
+  menu.className='menu';
+  menu.innerHTML=
+    '<button data-a="device"><span class="ic">&#11015;</span> Save to Device</button>'+
+    '<button data-a="gdrive" disabled><span class="ic">&#9729;</span> Save to Google Drive <span class="soon">SOON</span></button>'+
+    '<button data-a="dropbox" disabled><span class="ic">&#128230;</span> Save to Dropbox <span class="soon">SOON</span></button>'+
+    '<button data-a="onedrive" disabled><span class="ic">&#9729;</span> Save to OneDrive <span class="soon">SOON</span></button>'+
+    '<button data-a="qr"><span class="ic">&#9638;</span> Generate QR Code</button>'+
+    '<button data-a="reload"><span class="ic">&#8635;</span> Re-load file</button>';
+  caret.addEventListener('click',function(e){
+    e.stopPropagation();
+    document.querySelectorAll('.menu.on').forEach(function(m){if(m!==menu)m.classList.remove('on')});
+    menu.classList.toggle('on');
+  });
+  menu.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b||b.disabled) return;
+    menu.classList.remove('on');
+    var act=b.dataset.a;
+    if(act==='device'){ a.click(); }
+    else if(act==='qr'){ showQR(it); }
+    else if(act==='reload'){
+      it.blob=null; it.err=null;
+      drawResults(true);
+      convertOne(it,function(){ drawResults(false) });
+    }
+  });
+  wrap.appendChild(a); wrap.appendChild(caret); wrap.appendChild(menu);
+  return wrap;
+}
+
+function showQR(it){
+  var r=new FileReader();
+  r.onload=function(e){
+    var data=e.target.result;
+    if(data.length>2000){
+      alert('This file is too large for a QR code. QR codes work best for small images.');
+      return;
+    }
+    $('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=280x280&data='+encodeURIComponent(data);
+    $('qrOvl').classList.add('on');
+  };
+  r.readAsDataURL(it.blob);
+}
+$('qrOvl').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('on') });
+
+function zipAll(btn){
+  var ok=items.filter(function(i){return i.blob});
+  btn.disabled=true; btn.textContent='Zipping...';
+  var zip=new JSZip(), used={};
+  ok.forEach(function(it){
+    var base=stem(it.file.name),ex=extOf(it.out),n=base+'.'+ex;
+    if(used[n]){used[n]++;n=base+'-'+used[n]+'.'+ex}else used[n]=1;
+    zip.file(n,it.blob);
+  });
+  zip.generateAsync({type:'blob'}).then(function(out){
+    var u=URL.createObjectURL(out);
+    var a=document.createElement('a');
+    a.href=u;a.download='converted-images.zip';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(u)},2000);
+    btn.disabled=false;btn.textContent='Download ZIP';
+  });
+}
+
+$('convMore').addEventListener('click',function(){
+  items.forEach(function(it){
+    URL.revokeObjectURL(it.url);
+    if(it.outUrl) URL.revokeObjectURL(it.outUrl);
+  });
+  items=[]; paint();
+  $('results').classList.remove('on');
+  $('panel').classList.remove('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    $('fmtOvl').classList.remove('on');
+    $('qrOvl').classList.remove('on');
+    document.querySelectorAll('.menu.on').forEach(function(m){m.classList.remove('on')});
+  }
+});
 })();
 </script>
 
