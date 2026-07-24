@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image Converter — Convert JPG, PNG, WebP &amp; AVIF Online Free</title>
-<meta name="description" content="Free online image converter. Convert JPG, PNG, WebP and AVIF in your browser. No upload, no sign-up, no file size limit — your images never leave your device.">
-<link rel="canonical" href="https://mytoolsbench.vercel.app/">
+<title>PNG Converter — Convert to PNG Free, No Upload</title>
+<meta name="description" content="Free online PNG converter. Convert JPG, PNG, WebP, AVIF, GIF and more to PNG in your browser. No upload, no sign-up, no file size limit.">
+<link rel="canonical" href="https://mytoolsbench.vercel.app/png-converter">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23F97316'/%3E%3Cpath d='M9 21l4.5-5.5L17 19l3-3.5L23 21z' fill='%23fff'/%3E%3Ccircle cx='12.5' cy='11.5' r='2' fill='%23fff'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -255,6 +255,8 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
   .fcats{width:100%;display:flex;gap:6px;border-right:none;border-bottom:1px solid var(--line);padding:8px 12px}
   .fgrid{grid-template-columns:repeat(3,1fr)}
 }
+.lead{font-size:.95rem;color:var(--ink-2);margin-bottom:18px;max-width:660px}
+.pairs a.cur{color:var(--ink-3);font-weight:700;pointer-events:none}
 </style>
 </head>
 <body>
@@ -263,7 +265,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
   <div class="wrap hd">
     <a href="/" class="logo"><span class="logo-m">&#8644;</span>ToolBench</a>
     <nav class="hd-nav">
-      <a href="#how">How it works</a>
+      <a href="/">All formats</a>
       <a href="#pairs">Conversions</a>
       <span class="hd-badge">No upload</span>
     </nav>
@@ -273,8 +275,8 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
 <main class="wrap">
 
   <section class="hero">
-    <h1>Image Converter</h1>
-    <p>Convert images online, for free. Files are processed in your browser and never uploaded.</p>
+    <h1>PNG Converter</h1>
+    <p>Convert your files to and from PNG, for free. Everything runs in your browser and nothing is uploaded.</p>
   </section>
 
   <div class="dz" id="dz">
@@ -290,7 +292,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
       </div>
     </div>
     <div class="dz-note">or <b>drop files here</b> &mdash; or press <b>Ctrl&nbsp;+&nbsp;V</b> to paste</div>
-    <div class="dz-sub">No file size limit. No sign-up. <a href="#how">How it works</a></div>
+    <div class="dz-sub">No file size limit. No sign-up. <a href="/">All formats</a></div>
     <input type="file" id="fi" accept="image/*,.heic,.heif" multiple hidden>
   </div>
 
@@ -334,18 +336,19 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
   </div>
 
   <section class="sec" id="how">
-    <h2 class="sh">How to use this image converter</h2>
+    <h2 class="sh">How to convert to PNG</h2>
+    <p class="lead">This page converts any supported image into PNG. PNG is a lossless format, which means every pixel is preserved exactly as it was. It also supports transparency, so it is the usual choice for logos, icons, screenshots and any graphic with sharp edges or text.</p>
     <ol class="howto">
-      <li>Click the <b>Choose Files</b> button and select the images you want to convert.</li>
-      <li>Set the <b>Output</b> format for each file, then click the gear if you want to adjust quality or size.</li>
-      <li>Click <b>Convert</b>, then hit <b>Download</b> on each file or grab everything as a ZIP.</li>
+      <li>Click the <b>Choose Files</b> button and select any images you want as PNG.</li>
+      <li>PNG is already selected. Change it on any individual file if you want a mixed batch.</li>
+      <li>Click <b>Convert</b>, then download your PNG files individually or as a ZIP.</li>
     </ol>
 
     <div class="feats">
       <div class="feat">
         <div class="feat-i">&#8644;</div>
-        <h3>Convert any image</h3>
-        <p>JPG, PNG, WebP, AVIF, GIF, BMP, TIFF, ICO and PDF output, with per-file control so you can send different images to different formats in one batch.</p>
+        <h3>Anything into PNG</h3>
+        <p>JPG, PNG, WebP, AVIF, GIF, BMP and TIFF can all be turned into PNG here, in a single batch if you like, with no limit on how many files you drop in.</p>
       </div>
       <div class="feat">
         <div class="feat-i">&#9673;</div>
@@ -374,11 +377,10 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
   </details>
 
   <details class="acc">
-    <summary><span>What is an image file format?</span></summary>
+    <summary><span>What is a PNG file?</span></summary>
     <div class="acc-body">
-      <p>An image format is the set of rules describing how the picture is stored on disk &mdash; how the pixels are laid out, whether they are compressed, and what extra information travels with them.</p>
-      <p><b>Lossy</b> formats such as JPG and AVIF discard detail the eye is unlikely to notice in exchange for a much smaller file. <b>Lossless</b> formats such as PNG keep every pixel exactly, which matters for logos, screenshots and anything with sharp edges or text. WebP can do either.</p>
-      <p>The other difference that trips people up is <b>transparency</b>. PNG, WebP, AVIF and GIF can store transparent pixels; JPG cannot. Converting a transparent PNG to JPG will fill those areas &mdash; this tool uses white rather than the black most converters default to.</p>
+      <p><b>PNG</b> stands for Portable Network Graphics. PNG is a lossless format, which means every pixel is preserved exactly as it was. It also supports transparency, so it is the usual choice for logos, icons, screenshots and any graphic with sharp edges or text.</p>
+      <p>Because nothing is thrown away, PNG files of photographs are often several times larger than the same image as JPG or WebP.</p>
     </div>
   </details>
 
@@ -407,52 +409,37 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
   </details>
 
   <details class="acc" id="pairs" open>
-    <summary><span>Convert images to other file types</span></summary>
+    <summary><span>PNG conversions</span></summary>
     <div class="acc-body">
-      <p class="acc-lead">Jump straight to the conversion you need:</p>
+      <p class="acc-lead">Convert other formats into PNG:</p>
       <div class="pairs">
-        <a href="/png-to-jpg">PNG to JPG</a>
         <a href="/jpg-to-png">JPG to PNG</a>
-        <a href="/png-to-webp">PNG to WebP</a>
-        <a href="/jpg-to-webp">JPG to WebP</a>
         <a href="/webp-to-png">WebP to PNG</a>
-        <a href="/webp-to-jpg">WebP to JPG</a>
-        <a href="/heic-to-jpg">HEIC to JPG</a>
-        <a href="/png-to-avif">PNG to AVIF</a>
-        <a href="/jpg-to-avif">JPG to AVIF</a>
-        <a href="/avif-to-jpg">AVIF to JPG</a>
         <a href="/gif-to-png">GIF to PNG</a>
-        <a href="/png-to-gif">PNG to GIF</a>
-        <a href="/bmp-to-jpg">BMP to JPG</a>
-        <a href="/jpg-to-bmp">JPG to BMP</a>
-        <a href="/png-to-ico">PNG to ICO</a>
-        <a href="/jpg-to-ico">JPG to ICO</a>
-        <a href="/png-to-tiff">PNG to TIFF</a>
-        <a href="/tiff-to-jpg">TIFF to JPG</a>
-        <a href="/jpg-to-pdf">JPG to PDF</a>
-        <a href="/png-to-pdf">PNG to PDF</a>
-        <a href="/webp-to-pdf">WebP to PDF</a>
-        <a href="/gif-to-jpg">GIF to JPG</a>
         <a href="/avif-to-png">AVIF to PNG</a>
         <a href="/heic-to-png">HEIC to PNG</a>
+      </div>
+      <p class="acc-lead" style="margin-top:18px">Convert PNG into something else:</p>
+      <div class="pairs">
+        <a href="/png-to-jpg">PNG to JPG</a>
+        <a href="/png-to-webp">PNG to WebP</a>
+        <a href="/png-to-avif">PNG to AVIF</a>
+        <a href="/png-to-gif">PNG to GIF</a>
+        <a href="/png-to-ico">PNG to ICO</a>
+        <a href="/png-to-tiff">PNG to TIFF</a>
+        <a href="/png-to-pdf">PNG to PDF</a>
       </div>
     </div>
   </details>
 
   <section class="sec">
     <h2 class="sh">Frequently asked questions</h2>
-    <details class="faq"><summary>Are my images uploaded to a server?</summary>
-      <p>No. Conversion happens inside your browser using the Canvas API. Nothing is transmitted, stored or logged. You can disconnect from the internet after the page loads and it will still work.</p></details>
-    <details class="faq"><summary>Is there a file size or file count limit?</summary>
-      <p>No. Most converters cap you at 1&nbsp;GB or 20 files because they pay for server processing. There is no server here, so there is no cap. Very large images may simply take a moment on slower devices.</p></details>
-    <details class="faq"><summary>Which output format should I choose?</summary>
-      <p>WebP is the best default for the web &mdash; typically 25&ndash;35% smaller than JPG at matching quality, with support in every modern browser. AVIF is smaller still. JPG is the most universally compatible. PNG is for transparency and flat graphics.</p></details>
-    <details class="faq"><summary>What happens to transparency when I convert to JPG?</summary>
-      <p>JPG cannot store transparent pixels, so anything transparent has to be filled with a solid colour. This tool fills with white, which is what most people expect. If you need to keep transparency, convert to PNG, WebP or AVIF instead.</p></details>
-    <details class="faq"><summary>Why are some formats greyed out?</summary>
-      <p>Browsers can read many formats but can only write a limited set. EPS, PSD, SVG and TGA would need server-side processing, which would mean uploading your files. We chose privacy instead.</p></details>
-    <details class="faq"><summary>Is JPG the same as JPEG?</summary>
-      <p>Yes, identical. The two names exist only because older systems limited file extensions to three characters.</p></details>
+    <details class="faq"><summary>What can I convert to PNG?</summary>
+      <p>JPG, PNG, WebP, AVIF, GIF, BMP and TIFF can all be converted to PNG on this page. Drop in a mixed batch and they will all come out as PNG.</p></details>
+    <details class="faq"><summary>Is there a limit on file size or how many files I can convert?</summary>
+      <p>No. Conversion runs inside your browser rather than on a server, so there is no upload, no queue and no cap.</p></details>
+    <details class="faq"><summary>Are my files uploaded anywhere?</summary>
+      <p>No. Your files are read and written by your own browser and never leave your device. You can disconnect from the internet once the page has loaded and the converter will still work.</p></details>
   </section>
 
 </main>
@@ -876,7 +863,7 @@ function add(fl){
   arr.forEach(function(f){
     var it={
       id:++seq,file:f,url:null,
-      out:'JPG',quality:85,maxw:0,
+      out:'PNG',quality:85,maxw:0,
       blob:null,outUrl:null,err:null,decoding:false
     };
     if(isHeic(f)){
