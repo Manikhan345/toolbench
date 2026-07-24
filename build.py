@@ -131,9 +131,12 @@ def faqs(a, b):
                 f"No. Your files are read and written by your own browser and never leave your device. You can disconnect from "
                 f"the internet once the page has loaded and the converter will still work."))
     if A['name'] == 'HEIC':
-        out.append(("Why does my HEIC file fail to load?",
-                    "HEIC decoding depends on the browser. Safari on Mac and iPhone handles it natively; Chrome and Firefox on "
-                    "Windows often cannot. If a file fails, opening this page in Safari usually solves it."))
+        out.append(("Do I need Safari or an iPhone to convert HEIC?",
+                    "No. HEIC files are decoded here in any modern browser, including Chrome, Firefox and Edge on Windows. "
+                    "You will see a brief 'decoding HEIC' message while each file is read, then it converts like any other image."))
+        out.append(("Why are my iPhone photos saved as HEIC?",
+                    "Apple switched to HEIC because it stores roughly the same quality as JPG in about half the space. The "
+                    "trade-off is that most non-Apple software cannot open it, which is why converting to JPG or PNG is so common."))
     if B['name'] == 'JPEG' or A['name'] == 'JPEG':
         out.append(("Is JPEG the same as JPG?",
                     "Yes, completely. The two spellings exist only because older systems limited file extensions to three characters."))

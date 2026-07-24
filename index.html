@@ -9,6 +9,20 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23F97316'/%3E%3Cpath d='M9 21l4.5-5.5L17 19l3-3.5L23 21z' fill='%23fff'/%3E%3Ccircle cx='12.5' cy='11.5' r='2' fill='%23fff'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+<script type="module">
+  /* jSquash AVIF encoder — lets AVIF work in browsers whose canvas cannot write it */
+  try{
+    const m = await import('https://cdn.jsdelivr.net/npm/@jsquash/avif@1.3.0/+esm');
+    window.__avifEncode = async function(imageData, quality){
+      const cq = Math.max(0, Math.min(63, Math.round(63 - quality * 63)));
+      return await m.encode(imageData, { cqLevel: cq });
+    };
+    window.dispatchEvent(new Event('avif-ready'));
+  }catch(e){
+    window.__avifEncode = null;
+  }
+</script>
 <style>
 :root{
   --ink:#141821; --ink-2:#3E4757; --ink-3:#7B8598; --ink-4:#AEB6C4;
@@ -460,7 +474,7 @@ var FORMATS={
     {k:'TGA',m:null},
     {k:'TIFF',enc:'tiff',ext:'tiff'},
     {k:'WebP',m:'image/webp',ext:'webp'},
-    {k:'AVIF',m:'image/avif',ext:'avif'}
+    {k:'AVIF',enc:'avif',ext:'avif'}
   ],
   Document:[
     {k:'PDF',enc:'pdf',ext:'pdf'},
@@ -732,6 +746,20 @@ ENC.pdf=function(canvas,q,cb){
   },'image/jpeg',q);
 };
 
+/* AVIF via jSquash WASM — used when the browser canvas cannot encode AVIF itself */
+ENC.avif=function(canvas,q,cb){
+  var w=canvas.width,h=canvas.height;
+  var id=canvas.getContext('2d').getImageData(0,0,w,h);
+  if(typeof window.__avifEncode==='function'){
+    window.__avifEncode(id,q).then(function(buf){
+      cb(new Blob([buf],{type:'image/avif'}));
+    }).catch(function(){ cb(null); });
+  } else {
+    /* fall back to the browser's own encoder if it has one */
+    canvas.toBlob(function(b){ cb(b); },'image/avif',q);
+  }
+};
+
 var AVIF_OK=(function(){
   var c=document.createElement('canvas');c.width=c.height=1;
   try{return c.toDataURL('image/avif').indexOf('data:image/avif')===0}catch(e){return false}
@@ -802,21 +830,59 @@ document.addEventListener('paste',function(e){
 });
 
 /* ── add files ── */
+function isHeic(f){
+  return /\.(heic|heif)$/i.test(f.name) || f.type==='image/heic' || f.type==='image/heif';
+}
+
 function add(fl){
   var arr=Array.prototype.slice.call(fl).filter(function(f){
-    return (f.type&&f.type.indexOf('image/')===0)||/\.(heic|heif)$/i.test(f.name);
+    return (f.type&&f.type.indexOf('image/')===0)||isHeic(f);
   });
   if(!arr.length) return;
   arr.forEach(function(f){
-    items.push({
-      id:++seq,file:f,url:URL.createObjectURL(f),
+    var it={
+      id:++seq,file:f,url:null,
       out:'JPG',quality:85,maxw:0,
-      blob:null,outUrl:null,err:null
-    });
+      blob:null,outUrl:null,err:null,decoding:false
+    };
+    if(isHeic(f)){
+      /* HEIC needs decoding before any canvas work — the browser cannot read it directly */
+      it.decoding=true;
+      it.url=null;
+      items.push(it);
+      decodeHeic(it);
+    } else {
+      it.url=URL.createObjectURL(f);
+      items.push(it);
+    }
   });
   paint();
   $('panel').classList.add('on');
   $('results').classList.remove('on');
+}
+
+function decodeHeic(it){
+  function done(url){
+    it.url=url; it.decoding=false; paint();
+  }
+  function fail(msg){
+    it.decoding=false; it.err=msg;
+    /* fall back to the raw file so Safari, which reads HEIC natively, still works */
+    it.url=URL.createObjectURL(it.file);
+    paint();
+  }
+  if(typeof heic2any!=='function'){
+    fail('HEIC decoder failed to load'); return;
+  }
+  heic2any({blob:it.file,toType:'image/png'})
+    .then(function(out){
+      var b=Array.isArray(out)?out[0]:out;
+      it.decodedBlob=b;
+      done(URL.createObjectURL(b));
+    })
+    .catch(function(){
+      fail('Could not decode this HEIC file');
+    });
 }
 
 function paint(){
@@ -833,9 +899,10 @@ function paint(){
         '<button class="iconbtn gear" title="Settings">&#9881;</button>'+
         '<button class="iconbtn x" title="Remove">&#10005;</button>'+
       '</div>';
-    row.querySelector('.fthumb').src=it.url;
+    if(it.url) row.querySelector('.fthumb').src=it.url;
     row.querySelector('.fname').textContent=it.file.name;
-    row.querySelector('.fsize').textContent=bytes(it.file.size);
+    row.querySelector('.fsize').textContent=
+      it.decoding ? 'decoding HEIC\u2026' : bytes(it.file.size);
     row.querySelector('.ok').textContent=keyOf(it.out);
     row.querySelector('.opick').addEventListener('click',function(e){e.stopPropagation();openFmt(it.id)});
     row.querySelector('.gear').addEventListener('click',function(){toggleSet(it.id)});
@@ -901,10 +968,11 @@ function drawFmt(cat,q){
     var b=document.createElement('button');
     b.className='fopt';
     b.textContent=f.k;
-    var usable=(f.enc?true:(f.m && (f.m!=='image/avif'||AVIF_OK)));
+    var usable=f.enc||f.m;
+    if(f.k==='AVIF') usable = AVIF_OK || typeof window.__avifEncode==='function';
     if(!usable){
       b.disabled=true;
-      b.title=f.k==='AVIF' ? 'This browser cannot encode AVIF' : f.k+' output needs server-side processing';
+      b.title=f.k==='AVIF' ? 'AVIF encoder still loading \u2014 try again in a moment' : f.k+' output needs server-side processing';
     } else {
       if(it && it.out===f.k) b.classList.add('on');
       b.addEventListener('click',function(){
@@ -926,9 +994,22 @@ function drawFmt(cat,q){
 }
 $('fmtOvl').addEventListener('click',function(e){ if(e.target===$('fmtOvl')) this.classList.remove('on') });
 
+/* the AVIF WASM module loads asynchronously — refresh the picker once it is ready */
+window.addEventListener('avif-ready',function(){
+  if($('fmtOvl').classList.contains('on')){
+    var cat=$('fcats').querySelector('.fcat.on').dataset.cat;
+    drawFmt(cat,$('fmtSearch').value);
+  }
+});
+
 /* ── convert ── */
 $('convertBtn').addEventListener('click',function(){
   if(!items.length) return;
+  var pending=items.filter(function(i){return i.decoding});
+  if(pending.length){
+    alert('Still decoding '+pending.length+' HEIC file'+(pending.length>1?'s':'')+'. Give it a moment and try again.');
+    return;
+  }
   this.disabled=true;
   $('results').classList.add('on');
   drawResults(true);
@@ -946,6 +1027,7 @@ $('convertBtn').addEventListener('click',function(){
 function convertOne(it,cb){
   var fmt=fmtByKey(it.out);
   if(!fmt){ it.err='Unknown format'; cb(); return; }
+  if(!it.url){ it.err=it.err||'File could not be read'; cb(); return; }
   var img=new Image();
   img.onload=function(){
     var w=img.naturalWidth,h=img.naturalHeight;
