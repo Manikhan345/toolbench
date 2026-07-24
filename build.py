@@ -66,7 +66,7 @@ PAIRS = [
  ('WEBP','PDF'), ('GIF','JPG'), ('AVIF','PNG'), ('HEIC','PNG'),
 ]
 
-DOMAIN = 'https://mytoolsbench.vercel.app'
+DOMAIN = 'https://mytoolsbench.com'
 
 
 def slug(a, b):
@@ -253,6 +253,115 @@ def build_page(src, a, b):
     return doc
 
 
+def build_hub(src, fmt):
+    """A /<format>-converter page: converts anything to that format, and links every pair."""
+    X = F[fmt]
+    s = f"{X['ext']}-converter"
+    title = f"{X['name']} Converter — Convert to {X['name']} Free, No Upload"
+    desc = (f"Free online {X['name']} converter. Convert JPG, PNG, WebP, AVIF, GIF and more to {X['name']} "
+            f"in your browser. No upload, no sign-up, no file size limit.")
+
+    to_pairs = [(a, b) for a, b in PAIRS if b == fmt]
+    from_pairs = [(a, b) for a, b in PAIRS if a == fmt]
+
+    doc = src
+
+    doc = re.sub(r'<title>.*?</title>', f'<title>{html.escape(title)}</title>', doc, count=1, flags=re.S)
+    doc = re.sub(r'(<meta name="description" content=")[^"]*(">)',
+                 lambda m: m.group(1) + html.escape(desc) + m.group(2), doc, count=1)
+    doc = re.sub(r'(<link rel="canonical" href=")[^"]*(">)',
+                 lambda m: m.group(1) + f'{DOMAIN}/{s}' + m.group(2), doc, count=1)
+
+    hero = (f'    <h1>{X["name"]} Converter</h1>\n'
+            f'    <p>Convert your files to and from {X["name"]}, for free. '
+            f'Everything runs in your browser and nothing is uploaded.</p>')
+    doc = re.sub(r'    <h1>Image Converter</h1>\n    <p>.*?</p>', hero, doc, count=1, flags=re.S)
+
+    doc = doc.replace("out:'JPG',quality:85,maxw:0,", f"out:'{X['name']}',quality:85,maxw:0,")
+
+    doc = doc.replace('<h2 class="sh">How to use this image converter</h2>',
+                      f'<h2 class="sh">How to convert to {X["name"]}</h2>')
+    doc = doc.replace(
+        '<li>Click the <b>Choose Files</b> button and select the images you want to convert.</li>',
+        f'<li>Click the <b>Choose Files</b> button and select any images you want as {X["name"]}.</li>')
+    doc = doc.replace(
+        '<li>Set the <b>Output</b> format for each file, then click the gear if you want to adjust quality or size.</li>',
+        f'<li>{X["name"]} is already selected. Change it on any individual file if you want a mixed batch.</li>')
+    doc = doc.replace(
+        '<li>Click <b>Convert</b>, then hit <b>Download</b> on each file or grab everything as a ZIP.</li>',
+        f'<li>Click <b>Convert</b>, then download your {X["name"]} files individually or as a ZIP.</li>')
+
+    lead = (f'    <p class="lead">This page converts any supported image into {X["name"]}. '
+            f'{X["what"]}</p>\n    <ol class="howto">')
+    doc = doc.replace('    <ol class="howto">', lead, 1)
+
+    doc = re.sub(
+        r'<h3>Convert any image</h3>\s*<p>.*?</p>',
+        f'<h3>Anything into {X["name"]}</h3>\n        <p>JPG, PNG, WebP, AVIF, GIF, BMP and TIFF can all be turned '
+        f'into {X["name"]} here, in a single batch if you like, with no limit on how many files you drop in.</p>',
+        doc, count=1, flags=re.S)
+
+    fmt_acc = (
+        f'  <details class="acc">\n'
+        f'    <summary><span>What is a {X["name"]} file?</span></summary>\n'
+        f'    <div class="acc-body">\n'
+        f'      <p><b>{X["name"]}</b> stands for {X["full"]}. {X["what"]}</p>\n'
+        f'      <p>{X["weak"]}</p>\n'
+        f'    </div>\n'
+        f'  </details>'
+    )
+    doc = re.sub(
+        r'  <details class="acc">\s*<summary><span>What is an image file format\?</span></summary>.*?</details>',
+        fmt_acc, doc, count=1, flags=re.S)
+
+    # replace the flat link grid with two grouped grids
+    to_links = ''.join(f'\n        <a href="/{slug(a,b)}">{F[a]["name"]} to {F[b]["name"]}</a>'
+                       for a, b in to_pairs)
+    from_links = ''.join(f'\n        <a href="/{slug(a,b)}">{F[a]["name"]} to {F[b]["name"]}</a>'
+                         for a, b in from_pairs)
+    grid_new = (
+        f'      <p class="acc-lead">Convert other formats into {X["name"]}:</p>\n'
+        f'      <div class="pairs">{to_links}\n      </div>\n'
+        f'      <p class="acc-lead" style="margin-top:18px">Convert {X["name"]} into something else:</p>\n'
+        f'      <div class="pairs">{from_links}\n      </div>'
+    )
+    doc = re.sub(
+        r'      <p class="acc-lead">Jump straight to the conversion you need:</p>\s*<div class="pairs">.*?</div>',
+        grid_new, doc, count=1, flags=re.S)
+    doc = doc.replace('<summary><span>Convert images to other file types</span></summary>',
+                      f'<summary><span>{X["name"]} conversions</span></summary>')
+
+    hub_faqs = [
+        (f"What can I convert to {X['name']}?",
+         f"JPG, PNG, WebP, AVIF, GIF, BMP and TIFF can all be converted to {X['name']} on this page. "
+         f"Drop in a mixed batch and they will all come out as {X['name']}."),
+        (f"Is there a limit on file size or how many files I can convert?",
+         "No. Conversion runs inside your browser rather than on a server, so there is no upload, no queue and no cap."),
+        (f"Are my files uploaded anywhere?",
+         "No. Your files are read and written by your own browser and never leave your device. You can disconnect "
+         "from the internet once the page has loaded and the converter will still work."),
+    ]
+    if not X['alpha']:
+        hub_faqs.insert(1, (f"What happens to transparency when converting to {X['name']}?",
+                            f"{X['name']} cannot store transparent pixels, so transparent areas are filled with white. "
+                            f"If you need to keep transparency, convert to PNG, WebP or AVIF instead."))
+    faq_html = '\n'.join(
+        f'    <details class="faq"><summary>{html.escape(q)}</summary>\n      <p>{html.escape(a)}</p></details>'
+        for q, a in hub_faqs)
+    doc = re.sub(
+        r'(<h2 class="sh">Frequently asked questions</h2>\n).*?(\n  </section>)',
+        lambda m: m.group(1) + faq_html + m.group(2), doc, count=1, flags=re.S)
+
+    doc = doc.replace('<a href="#how">How it works</a>', '<a href="/">All formats</a>')
+    doc = doc.replace('</style>',
+                      '.lead{font-size:.95rem;color:var(--ink-2);margin-bottom:18px;max-width:660px}\n'
+                      '.pairs a.cur{color:var(--ink-3);font-weight:700;pointer-events:none}\n</style>')
+    return doc
+
+
+HUBS = ['PNG', 'JPG', 'WEBP', 'AVIF', 'PDF', 'GIF', 'ICO', 'TIFF', 'BMP', 'HEIC']
+
+
 def main():
     src = open(SRC, encoding='utf-8').read()
     os.makedirs(OUT, exist_ok=True)
@@ -262,9 +371,21 @@ def main():
         path = os.path.join(OUT, slug(a, b) + '.html')
         open(path, 'w', encoding='utf-8').write(page)
         made.append((slug(a, b), len(page)))
+    hubs = []
+    for fmt in HUBS:
+        if not any(a == fmt or b == fmt for a, b in PAIRS):
+            continue
+        page = build_hub(src, fmt)
+        name = f"{F[fmt]['ext']}-converter"
+        open(os.path.join(OUT, name + '.html'), 'w', encoding='utf-8').write(page)
+        hubs.append((name, len(page)))
+    print('  pair pages')
     for s, n in made:
-        print(f'  {s:<18} {n:,} bytes')
-    print(f'\n{len(made)} pages written to {OUT}/')
+        print(f'    {s:<18} {n:,}')
+    print('  hub pages')
+    for s, n in hubs:
+        print(f'    {s:<18} {n:,}')
+    print(f'\n{len(made)} pairs + {len(hubs)} hubs = {len(made)+len(hubs)} pages in {OUT}/')
 
 
 if __name__ == '__main__':
