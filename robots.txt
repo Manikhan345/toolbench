@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mytoolsbench.vercel.app/sitemap.xml
