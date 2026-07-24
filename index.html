@@ -171,9 +171,37 @@ h2.sh{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
 .st-n{width:27px;height:27px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.83rem;margin-bottom:11px}
 .st h3{font-size:.97rem;font-weight:700;margin-bottom:5px}
 .st p{font-size:.87rem;color:var(--ink-2)}
-.pairs{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
-.pairs a{font-size:.85rem;font-weight:600;color:var(--ink-2);background:var(--bg-2);border:1px solid var(--line);padding:8px 14px;border-radius:8px;text-decoration:none}
-.pairs a:hover{border-color:var(--brand);color:var(--brand)}
+/* how-to ordered list */
+.howto{margin:6px 0 0;padding-left:20px;color:var(--ink-2)}
+.howto li{margin-bottom:9px;font-size:.94rem;padding-left:4px}
+.howto b{color:var(--ink);font-weight:700}
+
+/* feature columns */
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:26px;margin-top:34px;padding-top:30px;border-top:1px solid var(--line)}
+.feat{text-align:center}
+.feat-i{font-size:1.7rem;color:var(--brand);margin-bottom:10px;line-height:1}
+.feat h3{font-size:1rem;font-weight:700;margin-bottom:8px}
+.feat p{font-size:.87rem;color:var(--ink-2);line-height:1.65}
+
+/* accordion blocks */
+.acc{border:1px solid var(--line);border-radius:var(--r);margin-top:16px;background:var(--bg);box-shadow:var(--sh)}
+.acc summary{list-style:none;cursor:pointer;padding:17px 20px;display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:1.02rem}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:'\25BE';color:var(--ink-3);font-size:.8rem;transition:transform .18s}
+.acc[open] summary::after{transform:rotate(180deg)}
+.acc-body{padding:0 20px 20px;border-top:1px solid var(--line);padding-top:16px}
+.acc-body p{font-size:.9rem;color:var(--ink-2);margin-bottom:11px}
+.acc-body p:last-child{margin-bottom:0}
+.acc-body b{color:var(--ink);font-weight:700}
+.acc-lead{font-size:.88rem;color:var(--ink-3)}
+.tool-list{margin:4px 0 0;padding-left:20px}
+.tool-list li{font-size:.9rem;color:var(--ink-2);margin-bottom:8px}
+.tool-list a{color:var(--brand);font-weight:600;text-decoration:none}
+.tool-list a:hover{text-decoration:underline}
+
+.pairs{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:2px 20px;margin-top:12px}
+.pairs a{font-size:.88rem;color:var(--brand);text-decoration:none;padding:6px 0;background:none;border:none;font-weight:500}
+.pairs a:hover{text-decoration:underline}
 .faq{border-top:1px solid var(--line);padding:16px 0}
 .faq summary{font-weight:700;font-size:.94rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
 .faq summary::-webkit-details-marker{display:none}
@@ -207,7 +235,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
     <a href="/" class="logo"><span class="logo-m">&#8644;</span>ToolBench</a>
     <nav class="hd-nav">
       <a href="#how">How it works</a>
-      <a href="#formats">Formats</a>
+      <a href="#pairs">Conversions</a>
       <span class="hd-badge">No upload</span>
     </nav>
   </div>
@@ -277,30 +305,91 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
   </div>
 
   <section class="sec" id="how">
-    <h2 class="sh">How to convert images</h2>
-    <p>Three steps, no account, no waiting in a queue.</p>
-    <div class="steps3">
-      <div class="st"><div class="st-n">1</div><h3>Add your files</h3><p>Click "Choose Files", drop them in, paste with Ctrl+V, or load one from a URL.</p></div>
-      <div class="st"><div class="st-n">2</div><h3>Pick the output format</h3><p>Choose JPG, PNG, WebP or AVIF per file, and adjust quality if you want.</p></div>
-      <div class="st"><div class="st-n">3</div><h3>Convert and download</h3><p>Hit Convert, then download each file or grab everything as a ZIP.</p></div>
+    <h2 class="sh">How to use this image converter</h2>
+    <ol class="howto">
+      <li>Click the <b>Choose Files</b> button and select the images you want to convert.</li>
+      <li>Set the <b>Output</b> format for each file, then click the gear if you want to adjust quality or size.</li>
+      <li>Click <b>Convert</b>, then hit <b>Download</b> on each file or grab everything as a ZIP.</li>
+    </ol>
+
+    <div class="feats">
+      <div class="feat">
+        <div class="feat-i">&#8644;</div>
+        <h3>Convert any image</h3>
+        <p>JPG, PNG, WebP, AVIF, GIF, BMP, TIFF, ICO and PDF output, with per-file control so you can send different images to different formats in one batch.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-i">&#9673;</div>
+        <h3>Keep the quality</h3>
+        <p>Adjust quality per file and resize on the way through. Formats without transparency get a clean white matte instead of the black edges most converters leave behind.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-i">&#128274;</div>
+        <h3>Nothing is uploaded</h3>
+        <p>Your files are read and written by your own browser. They are never sent to a server, so there is nothing to delete afterwards and no size or file-count limit.</p>
+      </div>
     </div>
   </section>
 
-  <section class="sec" id="formats">
-    <h2 class="sh">Popular conversions</h2>
-    <p>Every conversion runs locally in your browser, so there is no queue, no size cap and nothing to upload.</p>
-    <div class="pairs">
-      <a href="#">PNG to JPG</a><a href="#">JPG to PNG</a><a href="#">PNG to WebP</a>
-      <a href="#">JPG to WebP</a><a href="#">WebP to PNG</a><a href="#">WebP to JPG</a>
-      <a href="#">HEIC to JPG</a><a href="#">PNG to AVIF</a><a href="#">JPG to AVIF</a>
-      <a href="#">AVIF to JPG</a><a href="#">GIF to PNG</a><a href="#">BMP to JPG</a>
+  <details class="acc" open>
+    <summary><span>More image tools</span></summary>
+    <div class="acc-body">
+      <p class="acc-lead">Other free tools for working with images, all running locally in your browser.</p>
+      <ol class="tool-list">
+        <li><a href="/compress">Image Compressor</a> &mdash; shrink a file by up to 90% without changing its format.</li>
+        <li><a href="/resize">Image Resizer</a> &mdash; set an exact width or height for any image.</li>
+        <li><a href="/crop">Crop Image</a> &mdash; trim away the parts you do not need.</li>
+        <li><a href="/pdf">Image to PDF</a> &mdash; turn one or many images into a single PDF document.</li>
+      </ol>
     </div>
-  </section>
+  </details>
+
+  <details class="acc">
+    <summary><span>What is an image file format?</span></summary>
+    <div class="acc-body">
+      <p>An image format is the set of rules describing how the picture is stored on disk &mdash; how the pixels are laid out, whether they are compressed, and what extra information travels with them.</p>
+      <p><b>Lossy</b> formats such as JPG and AVIF discard detail the eye is unlikely to notice in exchange for a much smaller file. <b>Lossless</b> formats such as PNG keep every pixel exactly, which matters for logos, screenshots and anything with sharp edges or text. WebP can do either.</p>
+      <p>The other difference that trips people up is <b>transparency</b>. PNG, WebP, AVIF and GIF can store transparent pixels; JPG cannot. Converting a transparent PNG to JPG will fill those areas &mdash; this tool uses white rather than the black most converters default to.</p>
+    </div>
+  </details>
 
   <div class="ad">
     <div class="ad-l">Advertisement</div>
     <div id="ad-2"><!-- ad code --></div>
   </div>
+
+  <details class="acc" id="pairs" open>
+    <summary><span>Convert images to other file types</span></summary>
+    <div class="acc-body">
+      <p class="acc-lead">Jump straight to the conversion you need:</p>
+      <div class="pairs">
+        <a href="/png-to-jpg">PNG to JPG</a>
+        <a href="/jpg-to-png">JPG to PNG</a>
+        <a href="/png-to-webp">PNG to WebP</a>
+        <a href="/jpg-to-webp">JPG to WebP</a>
+        <a href="/webp-to-png">WebP to PNG</a>
+        <a href="/webp-to-jpg">WebP to JPG</a>
+        <a href="/heic-to-jpg">HEIC to JPG</a>
+        <a href="/png-to-avif">PNG to AVIF</a>
+        <a href="/jpg-to-avif">JPG to AVIF</a>
+        <a href="/avif-to-jpg">AVIF to JPG</a>
+        <a href="/gif-to-png">GIF to PNG</a>
+        <a href="/png-to-gif">PNG to GIF</a>
+        <a href="/bmp-to-jpg">BMP to JPG</a>
+        <a href="/jpg-to-bmp">JPG to BMP</a>
+        <a href="/png-to-ico">PNG to ICO</a>
+        <a href="/jpg-to-ico">JPG to ICO</a>
+        <a href="/png-to-tiff">PNG to TIFF</a>
+        <a href="/tiff-to-jpg">TIFF to JPG</a>
+        <a href="/jpg-to-pdf">JPG to PDF</a>
+        <a href="/png-to-pdf">PNG to PDF</a>
+        <a href="/webp-to-pdf">WebP to PDF</a>
+        <a href="/gif-to-jpg">GIF to JPG</a>
+        <a href="/avif-to-png">AVIF to PNG</a>
+        <a href="/heic-to-png">HEIC to PNG</a>
+      </div>
+    </div>
+  </details>
 
   <section class="sec">
     <h2 class="sh">Frequently asked questions</h2>
@@ -310,8 +399,10 @@ footer{border-top:1px solid var(--line);padding:26px 0;margin-top:44px;backgroun
       <p>No. Most converters cap you at 1&nbsp;GB or 20 files because they pay for server processing. There is no server here, so there is no cap. Very large images may simply take a moment on slower devices.</p></details>
     <details class="faq"><summary>Which output format should I choose?</summary>
       <p>WebP is the best default for the web &mdash; typically 25&ndash;35% smaller than JPG at matching quality, with support in every modern browser. AVIF is smaller still. JPG is the most universally compatible. PNG is for transparency and flat graphics.</p></details>
+    <details class="faq"><summary>What happens to transparency when I convert to JPG?</summary>
+      <p>JPG cannot store transparent pixels, so anything transparent has to be filled with a solid colour. This tool fills with white, which is what most people expect. If you need to keep transparency, convert to PNG, WebP or AVIF instead.</p></details>
     <details class="faq"><summary>Why are some formats greyed out?</summary>
-      <p>Browsers can decode many formats but can only <em>write</em> JPG, PNG, WebP and AVIF. Formats like TIFF, PSD or SVG would need a server to encode, and adding a server would mean uploading your files. We chose privacy instead.</p></details>
+      <p>Browsers can read many formats but can only write a limited set. EPS, PSD, SVG and TGA would need server-side processing, which would mean uploading your files. We chose privacy instead.</p></details>
     <details class="faq"><summary>Is JPG the same as JPEG?</summary>
       <p>Yes, identical. The two names exist only because older systems limited file extensions to three characters.</p></details>
   </section>
